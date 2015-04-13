@@ -35,6 +35,8 @@ import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.common.view.SlidingTabLayout;
+import com.huhapp.android.customview.VoteDownView;
+import com.huhapp.android.customview.VoteUpView;
 import com.huhapp.android.huhapp.R;
 
 import java.util.ArrayList;
@@ -94,9 +96,32 @@ public class QuestionListFragment extends ListFragment
             // Lookup view for data population
             TextView qText = (TextView) convertView.findViewById(R.id.qText);
             TextView qType = (TextView) convertView.findViewById(R.id.qType);
+            VoteDownView voteDownView = (VoteDownView) convertView.findViewById(R.id.voteDown);
+            VoteUpView voteUpView = (VoteUpView) convertView.findViewById(R.id.voteUp);
+            TextView voteMeter = (TextView) convertView.findViewById(R.id.voteMeter);
+            TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
+            TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
+
             qText.setText(question.getText()+"?");
             qType.setText(question.getType().getWord());
             qType.setBackgroundColor(Color.parseColor(question.getType().getColor()));
+            voteMeter.setText(question.getVoteScore() + "");
+            createdText.setText(DateUtil.getDateInMillis(question.getCreated()));
+            repliesText.setText(question.getnComments() + " replies");
+
+            voteDownView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("VIEW", "Down VOTE!");
+                }
+            });
+
+            voteUpView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("VIEW", "Up VOTE!");
+                }
+            });
             // Return the completed view to render on screen
             return convertView;
         }
