@@ -2,6 +2,7 @@ package com.huhapp.android.api;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.huhapp.android.api.model.Question;
@@ -30,6 +31,9 @@ import java.util.Map;
  */
 public class Api {
     public static final String ENDPOINT = "https://huh-app.herokuapp.com/";
+    public static final String ENDPOINT_USER_CREATE = "api/user/create";
+    public static final String ENDPOINT_VOTE_UP = "api/vote/up";
+    public static final String ENDPOINT_VOTE_DOWN = "api/vote/down";
     public static final String ENDPOINT_QUESTIONS_LATEST = "api/question/recent";
     public static final String ENDPOINT_QUESTIONS_TRENDING = "api/question/trending";
     public static final String ENDPOINT_QUESTIONS_NEAR = "api/question/near";
@@ -87,25 +91,15 @@ public class Api {
         DefaultHttpClient httpClient = new DefaultHttpClient();
         return httpClient.execute(httpPost);
     }
-
-
-    public static List<Question> getQuestionBySomething(String endpoint) {
-        endpoint = ENDPOINT + endpoint;
+    private static JSONObject  makeRequestParsed(String path, Map<String, String> params) {
         try {
-            HttpResponse httpResponse = makeRequest(endpoint, new HashMap<String, String>());
+            HttpResponse httpResponse = makeRequest(path, params);
             int responseCode = httpResponse.getStatusLine().getStatusCode();
             if (responseCode == RESPONSE_CODE_OK) {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 httpResponse.getEntity().writeTo(os);
                 String output = os.toString("UTF-8");
-                JSONObject jsonObj = new JSONObject(output);
-
-                List<Question> questions = mapper.readValue(
-                        String.valueOf(jsonObj.getJSONArray(JSON_TAG_RESPONSE))
-                        ,  new TypeReference<List<Question>>(){});
-
-                return questions;
-
+                return new JSONObject(output);
             } else {
                 //Utils.debug(Api.class,"API response code is: "+responseCode);
                 return null;
@@ -117,8 +111,59 @@ public class Api {
         }
     }
 
+    private static <T> T makeRequestParsedForObject(String path, Map<String, String> params, Class<T> type) {
+        try {
+            JSONObject jsonObj = Api.makeRequestParsed(path, params);
+            if (type.equals(String.class)){
+                return (T) jsonObj.getString(JSON_TAG_RESPONSE);
+            } else {
+                JavaType jType = mapper.getTypeFactory().constructType(type);
+                return mapper.readValue(
+                        String.valueOf(jsonObj.getJSONObject(JSON_TAG_RESPONSE))
+                        , jType);
+            }
+        } catch (Exception e) {
+            Log.e("API", e.getMessage());
+            //Utils.debug(Api.class,"API error:",e);
+            return null;
+        }
+    }
 
-    public static List<Question> getQuestionByLatest() {
-        return getQuestionBySomething(ENDPOINT + ENDPOINT_QUESTIONS_LATEST);
+    private static <E> List<E> makeRequestParsedForList(String path, Map<String, String> params, Class<E> type) {
+        try {
+            JSONObject jsonObj = Api.makeRequestParsed(path, params);
+            JavaType jType = mapper.getTypeFactory().constructCollectionType(List.class, type);
+            return mapper.readValue(
+                    String.valueOf(jsonObj.getJSONArray(JSON_TAG_RESPONSE)), jType);
+        } catch (Exception e) {
+            Log.e("API", e.getMessage());
+            //Utils.debug(Api.class,"API error:",e);
+            return null;
+        }
+    }
+
+    ///
+    public static String createUser() {
+        Map<String, String> params = new HashMap<String, String>();
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_USER_CREATE, params, String.class);
+    }
+
+    public static List<Question> getQuestionBySomething(String endpoint, String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        return Api.makeRequestParsedForList(ENDPOINT + endpoint, params, Question.class);
+    }
+
+    public static Question voteUp(String questionId, String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("questionId", questionId);
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_VOTE_UP, params, Question.class);
+    }
+    public static Question voteDown(String questionId, String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("questionId", questionId);
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_VOTE_DOWN, params, Question.class);
     }
 }

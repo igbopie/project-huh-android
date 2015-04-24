@@ -88,7 +88,7 @@ public class QuestionListFragment extends ListFragment
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // Get the data item for this position
-            Question question = getItem(position);
+            final Question question = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.question_list_item_layout, parent, false);
@@ -96,9 +96,9 @@ public class QuestionListFragment extends ListFragment
             // Lookup view for data population
             TextView qText = (TextView) convertView.findViewById(R.id.qText);
             TextView qType = (TextView) convertView.findViewById(R.id.qType);
-            VoteDownView voteDownView = (VoteDownView) convertView.findViewById(R.id.voteDown);
-            VoteUpView voteUpView = (VoteUpView) convertView.findViewById(R.id.voteUp);
-            TextView voteMeter = (TextView) convertView.findViewById(R.id.voteMeter);
+            final VoteDownView voteDownView = (VoteDownView) convertView.findViewById(R.id.voteDown);
+            final VoteUpView voteUpView = (VoteUpView) convertView.findViewById(R.id.voteUp);
+            final TextView voteMeter = (TextView) convertView.findViewById(R.id.voteMeter);
             TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
             TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
 
@@ -109,17 +109,68 @@ public class QuestionListFragment extends ListFragment
             createdText.setText(DateUtil.getDateInMillis(question.getCreated()));
             repliesText.setText(question.getnComments() + " replies");
 
+            if (question.getMyVote() > 0){
+                voteDownView.setActive(false);
+                voteUpView.setActive(true);
+            } else if (question.getMyVote() < 0) {
+                voteDownView.setActive(true);
+                voteUpView.setActive(false);
+            } else {
+                voteDownView.setActive(false);
+                voteUpView.setActive(false);
+            }
+
             voteDownView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("VIEW", "Down VOTE!");
+                    VoteDown voteUp = new VoteDown(question.getId(), new OnTaskCompleted<Question>() {
+                        @Override
+                        public void onTaskCompleted(Question result) {
+                            if (result != null) {
+                                question.setMyVote(result.getMyVote());
+                                question.setVoteScore(result.getVoteScore());
+                                if (result.getMyVote() > 0){
+                                    voteDownView.setActive(false);
+                                    voteUpView.setActive(true);
+                                } else if (result.getMyVote() < 0) {
+                                    voteDownView.setActive(true);
+                                    voteUpView.setActive(false);
+                                } else {
+                                    voteDownView.setActive(false);
+                                    voteUpView.setActive(false);
+                                }
+                                voteMeter.setText(result.getVoteScore() + "");
+                            }
+                        }
+                    });
+                    voteUp.execute();
                 }
             });
 
             voteUpView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("VIEW", "Up VOTE!");
+                    VoteUp voteUp = new VoteUp(question.getId(), new OnTaskCompleted<Question>() {
+                        @Override
+                        public void onTaskCompleted(Question result) {
+                            if (result != null) {
+                                question.setMyVote(result.getMyVote());
+                                question.setVoteScore(result.getVoteScore());
+                                if (result.getMyVote() > 0){
+                                    voteDownView.setActive(false);
+                                    voteUpView.setActive(true);
+                                } else if (result.getMyVote() < 0) {
+                                    voteDownView.setActive(true);
+                                    voteUpView.setActive(false);
+                                } else {
+                                    voteDownView.setActive(false);
+                                    voteUpView.setActive(false);
+                                }
+                                voteMeter.setText(result.getVoteScore() + "");
+                            }
+                        }
+                    });
+                    voteUp.execute();
                 }
             });
             // Return the completed view to render on screen
@@ -139,7 +190,7 @@ public class QuestionListFragment extends ListFragment
 
         @Override
         protected List<Question> doInBackground(Void... voids) {
-            return Api.getQuestionBySomething(apiEndpoint);
+            return Api.getQuestionBySomething(apiEndpoint, PrefUtils.getFromPrefs(getActivity(), PrefUtils.PREFS_USER_ID, ""));
         }
 
         @Override
@@ -153,5 +204,53 @@ public class QuestionListFragment extends ListFragment
             //swipeLayout.setRefreshing(false);*/
         }
     }
+    private class VoteUp extends AsyncTask<Void,Void,Question> {
+        private String questionId;
+        private OnTaskCompleted<Question> listener;
+        private VoteUp(String questionId, OnTaskCompleted listener) {
+            this.questionId = questionId;
+            this.listener = listener;
+        }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Question doInBackground(Void... voids) {
+            return Api.voteUp(questionId, PrefUtils.getFromPrefs(getActivity(), PrefUtils.PREFS_USER_ID, ""));
+        }
+
+        @Override
+        protected void onPostExecute(Question result) {
+            super.onPostExecute(result);
+            listener.onTaskCompleted(result);
+        }
+    }
+
+    private class VoteDown extends AsyncTask<Void,Void,Question> {
+        private String questionId;
+        private OnTaskCompleted<Question> listener;
+        private VoteDown(String questionId, OnTaskCompleted listener) {
+            this.questionId = questionId;
+            this.listener = listener;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Question doInBackground(Void... voids) {
+            return Api.voteDown(questionId, PrefUtils.getFromPrefs(getActivity(), PrefUtils.PREFS_USER_ID, ""));
+        }
+
+        @Override
+        protected void onPostExecute(Question result) {
+            super.onPostExecute(result);
+            listener.onTaskCompleted(result);
+        }
+    }
 }

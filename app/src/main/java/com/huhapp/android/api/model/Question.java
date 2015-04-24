@@ -1,6 +1,7 @@
 package com.huhapp.android.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,6 +11,8 @@ import java.util.Date;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Question implements Serializable {
+    @JsonProperty("_id")
+    private String id;
     private QuestionType type;
     private String text;
     private Date created;
@@ -20,6 +23,7 @@ public class Question implements Serializable {
     private int nDownVotes;
     private String username;
     private String url;
+    private int myVote;
 
 
     public String getText() {
@@ -30,10 +34,27 @@ public class Question implements Serializable {
         this.text = text;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getMyVote() {
+        return myVote;
+    }
+
+    public void setMyVote(int myVote) {
+        this.myVote = myVote;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
-                "type=" + type +
+                "id='" + id + '\'' +
+                ", type=" + type +
                 ", text='" + text + '\'' +
                 ", created=" + created +
                 ", voteScore=" + voteScore +
@@ -43,6 +64,7 @@ public class Question implements Serializable {
                 ", nDownVotes=" + nDownVotes +
                 ", username='" + username + '\'' +
                 ", url='" + url + '\'' +
+                ", myVote=" + myVote +
                 '}';
     }
 

@@ -11,7 +11,7 @@ import android.view.View;
 /**
  * Created by igbopie on 4/12/15.
  */
-public class Voter extends View {
+public abstract class Voter extends View {
     Paint paint;
     float x;
     float y;
@@ -19,6 +19,17 @@ public class Voter extends View {
     float containerHeight;
     float radius;
     float stroke = 10;
+    float alphaActive = 1f;
+    float alphaNotActive = .1f;
+    boolean active = false;
+
+    //need values!
+    float rectLeft;
+    float rectTop;
+    float rectRight;
+    float rectBottom;
+    int color;
+    int arcSign = -1;
 
     public Voter(Context context) {
         super(context);
@@ -30,20 +41,22 @@ public class Voter extends View {
         init();
     }
 
-    public void init() {
-
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // Try for a width based on our minimum
         containerWidth = MeasureSpec.getSize(widthMeasureSpec);
         containerHeight = MeasureSpec.getSize(heightMeasureSpec);
-        radius =  (Math.min(containerWidth, containerHeight) / 2) - MeasureSpec.getSize((int)stroke);
+        radius =  Math.min(containerWidth / 2, containerHeight);
         y = containerHeight / 2;
         x = containerWidth / 2;
 
         setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+
+
+        rectLeft = (containerWidth/2) - radius;
+        rectRight = (containerWidth/2) + radius;
+        onMeasured();
     }
 
     protected void onDraw(Canvas canvas) {
@@ -52,17 +65,9 @@ public class Voter extends View {
         Paint paintUp = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintUp.setStyle(Paint.Style.FILL);
         //paintUp.setStrokeWidth(stroke);
-        paintUp.setColor(adjustAlpha(Color.parseColor("#2ecc71"),.1f)); //#2ecc71
-
-        Paint paintDown = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintDown.setStyle(Paint.Style.FILL);
-        //paintDown.setStrokeWidth(stroke);
-        paintDown.setColor(adjustAlpha(Color.parseColor("#e74c3c"),.1f));//
-        //canvas.drawCircle(x, y, radius, paint);
-
-        RectF rect = new RectF((containerWidth/2) - (radius), (containerHeight/2) - (radius), (containerWidth/2) + (radius), (containerHeight/2) + (radius));
-        canvas.drawArc(rect, 0, -180, false, paintUp);
-        canvas.drawArc(rect, 0, 180, false, paintDown);
+        paintUp.setColor(adjustAlpha(this.color, active?alphaActive:alphaNotActive));
+        RectF rect = new RectF(rectLeft, rectTop, rectRight, rectBottom);
+        canvas.drawArc(rect, 0, arcSign *180, false, paintUp);
 
     }
 
@@ -73,4 +78,17 @@ public class Voter extends View {
         int blue = Color.blue(color);
         return Color.argb(alpha, red, green, blue);
     }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+        invalidate();
+    }
+
+
+    abstract void init();
+    abstract void onMeasured();
 }

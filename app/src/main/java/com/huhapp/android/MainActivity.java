@@ -17,16 +17,24 @@
 package com.huhapp.android;
 
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.huhapp.android.api.Api;
+import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.activities.SampleActivityBase;
+import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.huhapp.R;
+import com.huhapp.android.util.PrefUtils;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
+
+import java.util.List;
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
@@ -55,9 +63,9 @@ public class MainActivity extends SampleActivityBase {
         setContentView(R.layout.activity_main);
 
         this.initRes();
-        if (savedInstanceState == null) {
-            this.setSearchTabActive();
-        }
+
+        new SignUp().execute();
+
     }
 
     private void initRes(){
@@ -127,5 +135,41 @@ public class MainActivity extends SampleActivityBase {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.sample_content_fragment, fragment);
         transaction.commit();
+    }
+
+    private class SignUp extends AsyncTask<Void,Void,String> {
+
+        private SignUp() {
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String userId = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_USER_ID, "");
+            if (userId == null || userId.length() == 0) {
+                return Api.createUser();
+            } else {
+                return userId;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String userId) {
+            super.onPostExecute(userId);
+            if (userId != null && userId.length() > 0) {
+                PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_USER_ID, userId);
+                MainActivity.this.setSearchTabActive();
+                Toast toast = Toast.makeText(MainActivity.this, "Signed up", Toast.LENGTH_SHORT);
+                toast.show();
+            } else {
+                //
+                Toast toast = Toast.makeText(MainActivity.this, "Error login in", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
     }
 }
