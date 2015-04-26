@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+      android:layout_width="match_parent"
+      android:layout_height="100dp"
+      android:orientation="horizontal"
+      android:gravity="center_vertical">
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@+id/qType"
+        android:layout_toLeftOf="@+id/voter"
+        >
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/createdText"
+            android:text="1 minute ago"
+            android:paddingLeft="5dp"
+            android:gravity="center_vertical"
+            android:textColor="#c3c3c3"
+            android:paddingTop="5dp"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/repliesText"
+            android:text="2 replies"
+            android:paddingLeft="5dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:textColor="#c3c3c3"
+            android:paddingBottom="5dp"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/qText"
+            android:text="time is it?"
+            android:paddingLeft="5dp"
+            android:gravity="center_vertical"
+            android:layout_below="@id/createdText"
+            android:layout_above="@id/repliesText"
+
+
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/voter"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+
+        >
+        <com.huhapp.android.customview.VoteUpView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/voteUp"
+           />
+
+        <com.huhapp.android.customview.VoteDownView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/voteDown"
+            android:layout_below="@+id/voteUp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="0"
+            android:gravity="center"
+            android:id="@+id/voteMeter"/>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

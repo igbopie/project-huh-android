@@ -17,6 +17,7 @@
 package com.huhapp.android.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,9 +29,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.huhapp.android.QuestionDetailActivity;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.logger.Log;
@@ -61,6 +64,10 @@ public class QuestionListFragment extends ListFragment
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         //new CustomToast(getActivity(), numbers_digits[(int) id]);
+        Intent intent = new Intent(this.getActivity(), QuestionDetailActivity.class);
+        Question question = adapter.getItem(position);
+        intent.putExtra(QuestionDetailActivity.EXTRA_QUESTION_ID, question.getId());
+        startActivity(intent);
     }
 
     @Override
@@ -88,91 +95,15 @@ public class QuestionListFragment extends ListFragment
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // Get the data item for this position
-            final Question question = getItem(position);
+            Question question = getItem(position);
+
             // Check if an existing view is being reused, otherwise inflate the view
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.question_list_item_layout, parent, false);
             }
-            // Lookup view for data population
-            TextView qText = (TextView) convertView.findViewById(R.id.qText);
-            TextView qType = (TextView) convertView.findViewById(R.id.qType);
-            final VoteDownView voteDownView = (VoteDownView) convertView.findViewById(R.id.voteDown);
-            final VoteUpView voteUpView = (VoteUpView) convertView.findViewById(R.id.voteUp);
-            final TextView voteMeter = (TextView) convertView.findViewById(R.id.voteMeter);
-            TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
-            TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
 
-            qText.setText(question.getText()+"?");
-            qType.setText(question.getType().getWord());
-            qType.setBackgroundColor(Color.parseColor(question.getType().getColor()));
-            voteMeter.setText(question.getVoteScore() + "");
-            createdText.setText(DateUtil.getDateInMillis(question.getCreated()));
-            repliesText.setText(question.getnComments() + " replies");
+            QuestionViewUtil.fillView(convertView, question, getActivity());
 
-            if (question.getMyVote() > 0){
-                voteDownView.setActive(false);
-                voteUpView.setActive(true);
-            } else if (question.getMyVote() < 0) {
-                voteDownView.setActive(true);
-                voteUpView.setActive(false);
-            } else {
-                voteDownView.setActive(false);
-                voteUpView.setActive(false);
-            }
-
-            voteDownView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    VoteDown voteUp = new VoteDown(question.getId(), new OnTaskCompleted<Question>() {
-                        @Override
-                        public void onTaskCompleted(Question result) {
-                            if (result != null) {
-                                question.setMyVote(result.getMyVote());
-                                question.setVoteScore(result.getVoteScore());
-                                if (result.getMyVote() > 0){
-                                    voteDownView.setActive(false);
-                                    voteUpView.setActive(true);
-                                } else if (result.getMyVote() < 0) {
-                                    voteDownView.setActive(true);
-                                    voteUpView.setActive(false);
-                                } else {
-                                    voteDownView.setActive(false);
-                                    voteUpView.setActive(false);
-                                }
-                                voteMeter.setText(result.getVoteScore() + "");
-                            }
-                        }
-                    });
-                    voteUp.execute();
-                }
-            });
-
-            voteUpView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    VoteUp voteUp = new VoteUp(question.getId(), new OnTaskCompleted<Question>() {
-                        @Override
-                        public void onTaskCompleted(Question result) {
-                            if (result != null) {
-                                question.setMyVote(result.getMyVote());
-                                question.setVoteScore(result.getVoteScore());
-                                if (result.getMyVote() > 0){
-                                    voteDownView.setActive(false);
-                                    voteUpView.setActive(true);
-                                } else if (result.getMyVote() < 0) {
-                                    voteDownView.setActive(true);
-                                    voteUpView.setActive(false);
-                                } else {
-                                    voteDownView.setActive(false);
-                                    voteUpView.setActive(false);
-                                }
-                                voteMeter.setText(result.getVoteScore() + "");
-                            }
-                        }
-                    });
-                    voteUp.execute();
-                }
-            });
             // Return the completed view to render on screen
             return convertView;
         }
@@ -204,53 +135,5 @@ public class QuestionListFragment extends ListFragment
             //swipeLayout.setRefreshing(false);*/
         }
     }
-    private class VoteUp extends AsyncTask<Void,Void,Question> {
-        private String questionId;
-        private OnTaskCompleted<Question> listener;
-        private VoteUp(String questionId, OnTaskCompleted listener) {
-            this.questionId = questionId;
-            this.listener = listener;
-        }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Question doInBackground(Void... voids) {
-            return Api.voteUp(questionId, PrefUtils.getFromPrefs(getActivity(), PrefUtils.PREFS_USER_ID, ""));
-        }
-
-        @Override
-        protected void onPostExecute(Question result) {
-            super.onPostExecute(result);
-            listener.onTaskCompleted(result);
-        }
-    }
-
-    private class VoteDown extends AsyncTask<Void,Void,Question> {
-        private String questionId;
-        private OnTaskCompleted<Question> listener;
-        private VoteDown(String questionId, OnTaskCompleted listener) {
-            this.questionId = questionId;
-            this.listener = listener;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Question doInBackground(Void... voids) {
-            return Api.voteDown(questionId, PrefUtils.getFromPrefs(getActivity(), PrefUtils.PREFS_USER_ID, ""));
-        }
-
-        @Override
-        protected void onPostExecute(Question result) {
-            super.onPostExecute(result);
-            listener.onTaskCompleted(result);
-        }
-    }
 }

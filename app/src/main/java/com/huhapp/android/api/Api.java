@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.util.JsonDateDeserializer;
@@ -34,12 +35,14 @@ public class Api {
     public static final String ENDPOINT_USER_CREATE = "api/user/create";
     public static final String ENDPOINT_VOTE_UP = "api/vote/up";
     public static final String ENDPOINT_VOTE_DOWN = "api/vote/down";
+    public static final String ENDPOINT_QUESTION_VIEW = "api/question/view";
     public static final String ENDPOINT_QUESTIONS_LATEST = "api/question/recent";
     public static final String ENDPOINT_QUESTIONS_TRENDING = "api/question/trending";
     public static final String ENDPOINT_QUESTIONS_NEAR = "api/question/near";
     public static final String ENDPOINT_QUESTIONS_MINE = "api/question/mine";
     public static final String ENDPOINT_QUESTIONS_COMMENTED = "api/question/commented";
     public static final String ENDPOINT_QUESTIONS_FAVORITES = "api/question/favorites";
+    public static final String ENDPOINT_COMMENTS_LIST = "api/comment/list";
 
 
     public static final int RESPONSE_CODE_OK = 200;
@@ -91,7 +94,8 @@ public class Api {
         DefaultHttpClient httpClient = new DefaultHttpClient();
         return httpClient.execute(httpPost);
     }
-    private static JSONObject  makeRequestParsed(String path, Map<String, String> params) {
+
+    private static JSONObject makeRequestParsed(String path, Map<String, String> params) {
         try {
             HttpResponse httpResponse = makeRequest(path, params);
             int responseCode = httpResponse.getStatusLine().getStatusCode();
@@ -114,7 +118,7 @@ public class Api {
     private static <T> T makeRequestParsedForObject(String path, Map<String, String> params, Class<T> type) {
         try {
             JSONObject jsonObj = Api.makeRequestParsed(path, params);
-            if (type.equals(String.class)){
+            if (type.equals(String.class)) {
                 return (T) jsonObj.getString(JSON_TAG_RESPONSE);
             } else {
                 JavaType jType = mapper.getTypeFactory().constructType(type);
@@ -154,16 +158,45 @@ public class Api {
         return Api.makeRequestParsedForList(ENDPOINT + endpoint, params, Question.class);
     }
 
-    public static Question voteUp(String questionId, String userId) {
+    public static Question questionVoteUp(String questionId, String userId) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("userId", userId);
         params.put("questionId", questionId);
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_VOTE_UP, params, Question.class);
     }
-    public static Question voteDown(String questionId, String userId) {
+
+    public static Question questionVoteDown(String questionId, String userId) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("userId", userId);
         params.put("questionId", questionId);
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_VOTE_DOWN, params, Question.class);
+    }
+
+    public static Question getQuestion(String questionId, String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("questionId", questionId);
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_QUESTION_VIEW, params, Question.class);
+    }
+
+    public static List<Comment> getComments(String questionId, String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("questionId", questionId);
+        return Api.makeRequestParsedForList(ENDPOINT + ENDPOINT_COMMENTS_LIST, params, Comment.class);
+    }
+
+    public static Comment commentVoteUp(String commentId, String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("commentId", commentId);
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_VOTE_UP, params, Comment.class);
+    }
+
+    public static Comment commentVoteDown(String commentId, String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("commentId", commentId);
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_VOTE_DOWN, params, Comment.class);
     }
 }
