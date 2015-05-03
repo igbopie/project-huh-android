@@ -16,6 +16,7 @@
 
 package com.huhapp.android.util;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -25,6 +26,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +52,7 @@ public class QuestionListFragment extends ListFragment
 {
     QuestionAdapter adapter;
     String apiEndpoint;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static QuestionListFragment newInstance(String apiEndpoint)
     {
@@ -81,10 +85,33 @@ public class QuestionListFragment extends ListFragment
 
         setListAdapter(adapter);
 
+
+
+        //super.onCreateView(inflater, container, savedInstanceState);
+        View view =  inflater.inflate(R.layout.fragment_questions_list, container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeLayout);
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // http://stackoverflow.com/questions/26858692/swiperefreshlayout-setrefreshing-not-showing-indicator-initially
+        mSwipeRefreshLayout.setProgressViewOffset(false, 0,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new GetQuestionsTask().execute();
+            }
+        });
+
         GetQuestionsTask gQT = new GetQuestionsTask();
         gQT.execute();
-
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     public class QuestionAdapter extends ArrayAdapter<Question> {
@@ -110,12 +137,13 @@ public class QuestionListFragment extends ListFragment
     }
 
     private class GetQuestionsTask extends AsyncTask<Void,Void,List<Question>> {
-
+        ProgressDialog progressDialog;
         private GetQuestionsTask() {
         }
 
         @Override
         protected void onPreExecute() {
+            mSwipeRefreshLayout.setRefreshing(true);
             super.onPreExecute();
         }
 
@@ -127,6 +155,7 @@ public class QuestionListFragment extends ListFragment
         @Override
         protected void onPostExecute(List<Question> result) {
             super.onPostExecute(result);
+            mSwipeRefreshLayout.setRefreshing(false);
             if (result != null) {
                 adapter.clear();
                 adapter.addAll(result);

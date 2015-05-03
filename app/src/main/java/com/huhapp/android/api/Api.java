@@ -43,6 +43,7 @@ public class Api {
     public static final String ENDPOINT_QUESTIONS_COMMENTED = "api/question/commented";
     public static final String ENDPOINT_QUESTIONS_FAVORITES = "api/question/favorites";
     public static final String ENDPOINT_COMMENTS_LIST = "api/comment/list";
+    public static final String ENDPOINT_COMMENTS_CREATE = "api/comment/create";
 
 
     public static final int RESPONSE_CODE_OK = 200;
@@ -198,5 +199,13 @@ public class Api {
         params.put("userId", userId);
         params.put("commentId", commentId);
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_VOTE_DOWN, params, Comment.class);
+    }
+
+    public static Comment createComment(String text, String userId, String questionId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("questionId", questionId);
+        params.put("text", text);
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_COMMENTS_CREATE, params, Comment.class);
     }
 }
