@@ -45,6 +45,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.huhapp.android.MainActivity" />
         </activity>
+        <activity
+            android:name="com.huhapp.android.CreateQuestionActivity"
+            android:label="@string/title_activity_create_question" >
+        </activity>
     </application>
 
 </manifest>

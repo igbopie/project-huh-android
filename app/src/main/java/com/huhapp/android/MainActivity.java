@@ -16,6 +16,7 @@
 
 package com.huhapp.android;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,6 +56,8 @@ public class MainActivity extends SampleActivityBase {
     private Drawable faBellOActive;
     private Drawable faEllipsisHDeactive;
     private Drawable faEllipsisHActive;
+    private Drawable faAddDeactive;
+    private Drawable faAddActive;
     private Menu menu;
 
     @Override
@@ -77,6 +80,8 @@ public class MainActivity extends SampleActivityBase {
         faBellOActive = new IconDrawable(this, Iconify.IconValue.fa_bell_o).colorRes(R.color.active).actionBarSize();
         faEllipsisHDeactive = new IconDrawable(this, Iconify.IconValue.fa_ellipsis_h).colorRes(R.color.deactive).actionBarSize();
         faEllipsisHActive = new IconDrawable(this, Iconify.IconValue.fa_ellipsis_h).colorRes(R.color.active).actionBarSize();
+        faAddDeactive = new IconDrawable(this, Iconify.IconValue.fa_plus_circle).colorRes(R.color.active).actionBarSize();
+        faAddActive = new IconDrawable(this, Iconify.IconValue.fa_plus_circle).colorRes(R.color.active).actionBarSize();
     }
 
     @Override
@@ -94,14 +99,23 @@ public class MainActivity extends SampleActivityBase {
     }
 
     private void setDeactiveIcons() {
+        getActionBar().setIcon(android.R.color.transparent);
         this.menu.findItem(R.id.search).setIcon(faSearchDeactive);
         this.menu.findItem(R.id.me).setIcon(faUserDeactive);
         this.menu.findItem(R.id.notifications).setIcon(faBellODeactive);
         this.menu.findItem(R.id.more).setIcon(faEllipsisHDeactive);
+        this.menu.findItem(R.id.add).setIcon(faAddDeactive);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        //I don't want to change the others icon
+        if (item.getItemId() == R.id.add) {
+            this.createQuestion();
+            return true;
+        }
+
         this.setDeactiveIcons();
         //item.getIcon().setC
         switch(item.getItemId()) {
@@ -129,6 +143,11 @@ public class MainActivity extends SampleActivityBase {
 
     private void setMeTabActive() {
         this.setFragment(new MeFragment());
+    }
+
+    private void createQuestion() {
+        Intent intent = new Intent(this, CreateQuestionActivity.class);
+        startActivity(intent);
     }
 
     private void setFragment(Fragment fragment) {
@@ -163,8 +182,8 @@ public class MainActivity extends SampleActivityBase {
             if (userId != null && userId.length() > 0) {
                 PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_USER_ID, userId);
                 MainActivity.this.setSearchTabActive();
-                Toast toast = Toast.makeText(MainActivity.this, "Signed up", Toast.LENGTH_SHORT);
-                toast.show();
+                //Toast toast = Toast.makeText(MainActivity.this, "Signed up", Toast.LENGTH_SHORT);
+                //toast.show();
             } else {
                 //
                 Toast toast = Toast.makeText(MainActivity.this, "Error login in", Toast.LENGTH_SHORT);

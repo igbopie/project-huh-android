@@ -27,4 +27,7 @@
     <item android:id="@+id/more"
         android:showAsAction="always"
         android:title=""/>
+    <item android:id="@+id/add"
+        android:showAsAction="always"
+        android:title=""/>
 </menu>
