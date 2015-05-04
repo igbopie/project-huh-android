@@ -16,6 +16,7 @@
 
 package com.huhapp.android.util;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -35,7 +36,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.huhapp.android.MainActivity;
 import com.huhapp.android.QuestionDetailActivity;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Question;
@@ -96,6 +99,16 @@ public class QuestionListFragment extends ListFragment
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == MainActivity.CREATE_QUESTION_CODE && resultCode == Activity.RESULT_OK) {
+            new GetQuestionsTask().execute();
+        }
+    }
+
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -137,13 +150,14 @@ public class QuestionListFragment extends ListFragment
     }
 
     private class GetQuestionsTask extends AsyncTask<Void,Void,List<Question>> {
-        ProgressDialog progressDialog;
         private GetQuestionsTask() {
         }
 
         @Override
         protected void onPreExecute() {
-            mSwipeRefreshLayout.setRefreshing(true);
+            if (mSwipeRefreshLayout != null) {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
             super.onPreExecute();
         }
 
@@ -155,7 +169,11 @@ public class QuestionListFragment extends ListFragment
         @Override
         protected void onPostExecute(List<Question> result) {
             super.onPostExecute(result);
-            mSwipeRefreshLayout.setRefreshing(false);
+
+            if (mSwipeRefreshLayout != null) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
             if (result != null) {
                 adapter.clear();
                 adapter.addAll(result);

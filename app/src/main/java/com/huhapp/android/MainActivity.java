@@ -16,6 +16,7 @@
 
 package com.huhapp.android;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -59,6 +60,10 @@ public class MainActivity extends SampleActivityBase {
     private Drawable faAddDeactive;
     private Drawable faAddActive;
     private Menu menu;
+
+    private Fragment currentFragment;
+
+    public static final int CREATE_QUESTION_CODE = 1816;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,13 +152,31 @@ public class MainActivity extends SampleActivityBase {
 
     private void createQuestion() {
         Intent intent = new Intent(this, CreateQuestionActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, CREATE_QUESTION_CODE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CREATE_QUESTION_CODE && resultCode == Activity.RESULT_OK) {
+            Toast.makeText(this, "Question Created", Toast.LENGTH_SHORT).show();
+
+            if (currentFragment != null) {
+                currentFragment.onActivityResult(requestCode, resultCode, data);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.i("MAINACTIVITY", requestCode + " " + resultCode);
+
     }
 
     private void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.sample_content_fragment, fragment);
         transaction.commit();
+
+        currentFragment = fragment;
     }
 
     private class SignUp extends AsyncTask<Void,Void,String> {

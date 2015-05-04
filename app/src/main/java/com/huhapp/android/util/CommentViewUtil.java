@@ -26,7 +26,7 @@ public class CommentViewUtil {
         TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
         TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
 
-        qText.setText(comment.getText() + "?");
+        qText.setText(comment.getText());
         voteMeter.setText(comment.getVoteScore() + "");
         createdText.setText(DateUtil.getDateInMillis(comment.getCreated()));
         repliesText.setText(comment.getUsername());

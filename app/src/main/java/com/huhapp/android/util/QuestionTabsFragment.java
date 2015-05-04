@@ -16,6 +16,7 @@
 
 package com.huhapp.android.util;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +33,9 @@ import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.common.view.SlidingTabLayout;
 import com.huhapp.android.huhapp.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class QuestionTabsFragment extends Fragment {
 
     static final String LOG_TAG = "SlidingTabsBasicFragment";
@@ -46,6 +50,8 @@ public abstract class QuestionTabsFragment extends Fragment {
      * A {@link android.support.v4.view.ViewPager} which will be used in conjunction with the {@link com.huhapp.android.common.view.SlidingTabLayout} above.
      */
     private ViewPager mViewPager;
+
+    private SamplePagerAdapter fragmentAdapter;
 
     /**
      * Inflates the {@link android.view.View} which will be displayed by this {@link android.support.v4.app.Fragment}, from the app's
@@ -69,10 +75,11 @@ public abstract class QuestionTabsFragment extends Fragment {
      */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        fragmentAdapter = new SamplePagerAdapter();
         // BEGIN_INCLUDE (setup_viewpager)
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new SamplePagerAdapter());
+        mViewPager.setAdapter(fragmentAdapter);
         // END_INCLUDE (setup_viewpager)
 
         // BEGIN_INCLUDE (setup_slidingtablayout)
@@ -91,6 +98,8 @@ public abstract class QuestionTabsFragment extends Fragment {
      * {@link com.huhapp.android.common.view.SlidingTabLayout}.
      */
     class SamplePagerAdapter extends FragmentStatePagerAdapter {
+
+        private List<Fragment> fragmentList = new ArrayList<Fragment>();
 
         public SamplePagerAdapter() {
             super(getFragmentManager());
@@ -112,7 +121,13 @@ public abstract class QuestionTabsFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return QuestionListFragment.newInstance(getPagerItems()[position].apiEndpoint);
+            try {
+                return fragmentList.get(position);
+            } catch(IndexOutOfBoundsException ex) {
+                Fragment fragment = QuestionListFragment.newInstance(getPagerItems()[position].apiEndpoint);
+                fragmentList.add(position, fragment);
+                return fragment;
+            }
         }
 
     }
@@ -126,7 +141,17 @@ public abstract class QuestionTabsFragment extends Fragment {
             this.apiEndpoint = apiEndpoint;
         }
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        Fragment currentFragment = fragmentAdapter.getItem(mViewPager.getCurrentItem());
+        if (currentFragment != null) {
+            currentFragment.onActivityResult(requestCode, resultCode, data);
+        }
+
+        Log.i("FRAGMENTPARENT", mViewPager.getCurrentItem() + " "+requestCode + " " + resultCode);
+    }
 
     //
     protected abstract QuestionListPagerItem[] getPagerItems();

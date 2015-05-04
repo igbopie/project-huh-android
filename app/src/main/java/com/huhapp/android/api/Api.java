@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Question;
+import com.huhapp.android.api.model.QuestionType;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.util.JsonDateDeserializer;
 
@@ -34,7 +35,9 @@ public class Api {
     public static final String ENDPOINT = "https://huh-app.herokuapp.com/";
     public static final String ENDPOINT_USER_CREATE = "api/user/create";
     public static final String ENDPOINT_VOTE_UP = "api/vote/up";
+    public static final String ENDPOINT_QUESTION_TYPE_LIST = "api/questiontype/list";
     public static final String ENDPOINT_VOTE_DOWN = "api/vote/down";
+    public static final String ENDPOINT_QUESTION_CREATE = "api/question/create";
     public static final String ENDPOINT_QUESTION_VIEW = "api/question/view";
     public static final String ENDPOINT_QUESTIONS_LATEST = "api/question/recent";
     public static final String ENDPOINT_QUESTIONS_TRENDING = "api/question/trending";
@@ -207,5 +210,23 @@ public class Api {
         params.put("questionId", questionId);
         params.put("text", text);
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_COMMENTS_CREATE, params, Comment.class);
+    }
+
+    public static List<QuestionType> questionTypeList() {
+        Map<String, String> params = new HashMap<String, String>();
+        return Api.makeRequestParsedForList(ENDPOINT + ENDPOINT_QUESTION_TYPE_LIST, params, QuestionType.class);
+    }
+
+    public static Question questionCreate(String questionType, String text, String userId, String longitude, String latitude) {
+        Map<String, String> params = new HashMap<String, String>();
+
+        params.put("type", questionType);
+        params.put("text", text);
+        params.put("userId", userId);
+
+        //TODO longitude
+        //TODO latitude
+
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_QUESTION_CREATE, params, Question.class);
     }
 }
