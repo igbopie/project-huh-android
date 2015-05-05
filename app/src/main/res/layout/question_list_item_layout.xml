@@ -24,66 +24,122 @@
         android:layout_toLeftOf="@+id/voter"
         >
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/createdText"
-            android:text="1 minute ago"
-            android:paddingLeft="5dp"
             android:gravity="center_vertical"
             android:textColor="#c3c3c3"
-            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingBottom="5dp"
+            android:id="@+id/timeIcon"
+            fontPath="fonts/huh-font.ttf"
+            android:layout_alignParentBottom="true"
+            android:text="t"
             />
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/createdText"
+            android:text="1d"
+            android:gravity="center_vertical"
+            android:textColor="#c3c3c3"
+            android:paddingLeft="5dp"
+            android:paddingBottom="5dp"
+            android:layout_toRightOf="@+id/timeIcon"
+            android:layout_alignParentBottom="true"
+            />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/repliesText"
             android:text="2 replies"
             android:paddingLeft="5dp"
+            android:paddingBottom="5dp"
             android:gravity="center_vertical"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:textColor="#c3c3c3"
-            android:paddingBottom="5dp"
             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="r"
+            android:gravity="center_vertical"
+            android:textColor="#c3c3c3"
+            android:paddingLeft="5dp"
+            android:paddingBottom="5dp"
+            android:id="@+id/repliesIcon"
+            android:layout_toLeftOf="@+id/repliesText"
+            android:layout_alignParentBottom="true"
+            fontPath="fonts/huh-font.ttf"
+            />
+
         <TextView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/qText"
             android:text="time is it?"
             android:paddingLeft="5dp"
             android:gravity="center_vertical"
-            android:layout_below="@id/createdText"
-            android:layout_above="@id/repliesText"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
 
 
             />
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/voter"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:gravity="center"
 
         >
-        <com.huhapp.android.customview.VoteUpView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
+        <TextView
+
+            fontPath="fonts/huh-font.ttf"
+            android:text="b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/voteUp"
+            android:textSize="24dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="#bbbbbb"
            />
 
-        <com.huhapp.android.customview.VoteDownView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:id="@+id/voteDown"
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:gravity="center"
+            android:id="@+id/voteMeter"
             android:layout_below="@+id/voteUp"
+            android:textColor="#bbbbbb"
             />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="0"
-            android:gravity="center"
-            android:id="@+id/voteMeter"/>
+
+            fontPath="fonts/huh-font.ttf"
+            android:text="u"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/voteDown"
+            android:layout_below="@+id/voteMeter"
+            android:textSize="24dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="#bbbbbb"
+            />
+
 
 
     </RelativeLayout>

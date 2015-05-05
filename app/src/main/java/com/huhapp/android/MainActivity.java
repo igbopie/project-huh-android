@@ -17,6 +17,7 @@
 package com.huhapp.android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -38,6 +39,8 @@ import com.joanzapata.android.iconify.Iconify;
 
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
  * {@link android.support.v4.app.Fragment} which can display a view.
@@ -46,6 +49,11 @@ import java.util.List;
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
 public class MainActivity extends SampleActivityBase {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     public static final String TAG = "MainActivity";
 
@@ -134,6 +142,7 @@ public class MainActivity extends SampleActivityBase {
                 return true;
             case R.id.notifications:
                 item.setIcon(faBellOActive);
+                this.setNotificationTabActive();
                 return true;
             case R.id.more:
                 item.setIcon(faEllipsisHActive);
@@ -148,6 +157,10 @@ public class MainActivity extends SampleActivityBase {
 
     private void setMeTabActive() {
         this.setFragment(new MeFragment());
+    }
+
+    private void setNotificationTabActive() {
+        this.setFragment(new NotificationsFragment());
     }
 
     private void createQuestion() {

@@ -20,8 +20,8 @@ public class QuestionViewUtil {
 // Lookup view for data population
         TextView qText = (TextView) convertView.findViewById(R.id.qText);
         TextView qType = (TextView) convertView.findViewById(R.id.qType);
-        final VoteDownView voteDownView = (VoteDownView) convertView.findViewById(R.id.voteDown);
-        final VoteUpView voteUpView = (VoteUpView) convertView.findViewById(R.id.voteUp);
+        final TextView voteDownView = (TextView) convertView.findViewById(R.id.voteDown);
+        final TextView voteUpView = (TextView) convertView.findViewById(R.id.voteUp);
         final TextView voteMeter = (TextView) convertView.findViewById(R.id.voteMeter);
         TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
         TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
@@ -29,20 +29,10 @@ public class QuestionViewUtil {
         qText.setText(question.getText()+"?");
         qType.setText(question.getType().getWord());
         qType.setBackgroundColor(Color.parseColor(question.getType().getColor()));
-        voteMeter.setText(question.getVoteScore() + "");
         createdText.setText(DateUtil.getDateInMillis(question.getCreated()));
         repliesText.setText(question.getnComments() + " replies");
 
-        if (question.getMyVote() > 0){
-            voteDownView.setActive(false);
-            voteUpView.setActive(true);
-        } else if (question.getMyVote() < 0) {
-            voteDownView.setActive(true);
-            voteUpView.setActive(false);
-        } else {
-            voteDownView.setActive(false);
-            voteUpView.setActive(false);
-        }
+        setVoter(question, voteMeter, voteUpView, voteDownView);
 
         voteDownView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,17 +43,7 @@ public class QuestionViewUtil {
                         if (result != null) {
                             question.setMyVote(result.getMyVote());
                             question.setVoteScore(result.getVoteScore());
-                            if (result.getMyVote() > 0){
-                                voteDownView.setActive(false);
-                                voteUpView.setActive(true);
-                            } else if (result.getMyVote() < 0) {
-                                voteDownView.setActive(true);
-                                voteUpView.setActive(false);
-                            } else {
-                                voteDownView.setActive(false);
-                                voteUpView.setActive(false);
-                            }
-                            voteMeter.setText(result.getVoteScore() + "");
+                            setVoter(question, voteMeter, voteUpView, voteDownView);
                         }
                     }
                 });
@@ -80,23 +60,30 @@ public class QuestionViewUtil {
                         if (result != null) {
                             question.setMyVote(result.getMyVote());
                             question.setVoteScore(result.getVoteScore());
-                            if (result.getMyVote() > 0){
-                                voteDownView.setActive(false);
-                                voteUpView.setActive(true);
-                            } else if (result.getMyVote() < 0) {
-                                voteDownView.setActive(true);
-                                voteUpView.setActive(false);
-                            } else {
-                                voteDownView.setActive(false);
-                                voteUpView.setActive(false);
-                            }
-                            voteMeter.setText(result.getVoteScore() + "");
+                            setVoter(question, voteMeter, voteUpView, voteDownView);
                         }
                     }
                 });
                 voteUp.execute();
             }
         });
+    }
+
+    private static void setVoter(Question question,TextView voteMeter,TextView voteUpView,TextView voteDownView) {
+        voteMeter.setText(question.getVoteScore() + "");
+        if (question.getMyVote() > 0){
+            voteMeter.setTextColor(Color.parseColor(question.getType().getColor()));
+            voteDownView.setTextColor(Color.parseColor("#BBBBBB"));
+            voteUpView.setTextColor(Color.parseColor(question.getType().getColor()));
+        } else if (question.getMyVote() < 0) {
+            voteMeter.setTextColor(Color.parseColor(question.getType().getColor()));
+            voteDownView.setTextColor(Color.parseColor(question.getType().getColor()));
+            voteUpView.setTextColor(Color.parseColor("#BBBBBB"));
+        } else {
+            voteMeter.setTextColor(Color.parseColor("#BBBBBB"));
+            voteDownView.setTextColor(Color.parseColor("#BBBBBB"));
+            voteUpView.setTextColor(Color.parseColor("#BBBBBB"));
+        }
     }
 
     private static class VoteUp extends AsyncTask<Void,Void,Question> {

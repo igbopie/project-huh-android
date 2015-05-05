@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.huhapp.android.api.model.Comment;
+import com.huhapp.android.api.model.Notification;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.api.model.QuestionType;
 import com.huhapp.android.common.logger.Log;
@@ -34,6 +35,7 @@ import java.util.Map;
 public class Api {
     public static final String ENDPOINT = "https://huh-app.herokuapp.com/";
     public static final String ENDPOINT_USER_CREATE = "api/user/create";
+    public static final String ENDPOINT_NOTIFICATION_LIST = "api/notification/list";
     public static final String ENDPOINT_VOTE_UP = "api/vote/up";
     public static final String ENDPOINT_QUESTION_TYPE_LIST = "api/questiontype/list";
     public static final String ENDPOINT_VOTE_DOWN = "api/vote/down";
@@ -107,6 +109,8 @@ public class Api {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 httpResponse.getEntity().writeTo(os);
                 String output = os.toString("UTF-8");
+
+                //Log.e("API", output);
                 return new JSONObject(output);
             } else {
                 //Utils.debug(Api.class,"API response code is: "+responseCode);
@@ -210,6 +214,11 @@ public class Api {
         params.put("questionId", questionId);
         params.put("text", text);
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_COMMENTS_CREATE, params, Comment.class);
+    }
+    public static List<Notification> notificationList(String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        return Api.makeRequestParsedForList(ENDPOINT + ENDPOINT_NOTIFICATION_LIST, params, Notification.class);
     }
 
     public static List<QuestionType> questionTypeList() {

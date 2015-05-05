@@ -37,8 +37,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 public class CreateQuestionActivity extends ListActivity {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     private ProgressDialog progressDialog;
     private QuestionTypeAdapter adapter;

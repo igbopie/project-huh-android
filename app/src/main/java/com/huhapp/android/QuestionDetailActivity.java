@@ -37,8 +37,15 @@ import com.huhapp.android.util.QuestionViewUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 public class QuestionDetailActivity extends ListActivity {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     public static String EXTRA_QUESTION_ID = "__question_id__";
 
