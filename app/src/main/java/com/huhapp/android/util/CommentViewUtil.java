@@ -1,6 +1,7 @@
 package com.huhapp.android.util;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.TextView;
@@ -17,30 +18,25 @@ import com.huhapp.android.huhapp.R;
  */
 public class CommentViewUtil {
 
-    public static void fillView(View convertView, final Comment comment, final Context context) {
+
+    public static Integer VOTER_WIDTH = null;
+
+    public static void fillView(View convertView, final Comment comment, final Question question, final Context context) {
 // Lookup view for data population
         TextView qText = (TextView) convertView.findViewById(R.id.qText);
-        final VoteDownView voteDownView = (VoteDownView) convertView.findViewById(R.id.voteDown);
-        final VoteUpView voteUpView = (VoteUpView) convertView.findViewById(R.id.voteUp);
+        final TextView voteDownView = (TextView) convertView.findViewById(R.id.voteDown);
+        final TextView voteUpView = (TextView) convertView.findViewById(R.id.voteUp);
         final TextView voteMeter = (TextView) convertView.findViewById(R.id.voteMeter);
+        final View voter =  convertView.findViewById(R.id.voter);
         TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
         TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
 
         qText.setText(comment.getText());
-        voteMeter.setText(comment.getVoteScore() + "");
         createdText.setText(DateUtil.getDateInMillis(comment.getCreated()));
         repliesText.setText(comment.getUsername());
 
-        if (comment.getMyVote() > 0){
-            voteDownView.setActive(false);
-            voteUpView.setActive(true);
-        } else if (comment.getMyVote() < 0) {
-            voteDownView.setActive(true);
-            voteUpView.setActive(false);
-        } else {
-            voteDownView.setActive(false);
-            voteUpView.setActive(false);
-        }
+
+        setVoter(comment, question, voteMeter, voteUpView, voteDownView, voter);
 
         voteDownView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,17 +47,7 @@ public class CommentViewUtil {
                         if (result != null) {
                             comment.setMyVote(result.getMyVote());
                             comment.setVoteScore(result.getVoteScore());
-                            if (result.getMyVote() > 0){
-                                voteDownView.setActive(false);
-                                voteUpView.setActive(true);
-                            } else if (result.getMyVote() < 0) {
-                                voteDownView.setActive(true);
-                                voteUpView.setActive(false);
-                            } else {
-                                voteDownView.setActive(false);
-                                voteUpView.setActive(false);
-                            }
-                            voteMeter.setText(result.getVoteScore() + "");
+                            setVoter(comment, question, voteMeter, voteUpView, voteDownView, voter);
                         }
                     }
                 });
@@ -78,17 +64,7 @@ public class CommentViewUtil {
                         if (result != null) {
                             comment.setMyVote(result.getMyVote());
                             comment.setVoteScore(result.getVoteScore());
-                            if (result.getMyVote() > 0){
-                                voteDownView.setActive(false);
-                                voteUpView.setActive(true);
-                            } else if (result.getMyVote() < 0) {
-                                voteDownView.setActive(true);
-                                voteUpView.setActive(false);
-                            } else {
-                                voteDownView.setActive(false);
-                                voteUpView.setActive(false);
-                            }
-                            voteMeter.setText(result.getVoteScore() + "");
+                            setVoter(comment, question, voteMeter, voteUpView, voteDownView, voter);
                         }
                     }
                 });
@@ -96,6 +72,33 @@ public class CommentViewUtil {
             }
         });
     }
+
+    private static void setVoter(Comment comment, Question question, TextView voteMeter,TextView voteUpView,TextView voteDownView, View voter) {
+
+        if (VOTER_WIDTH == null) {
+            voteMeter.setText("9999");
+            voteMeter.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            VOTER_WIDTH = voteMeter.getMeasuredWidth();
+        }
+        voter.getLayoutParams().width = VOTER_WIDTH;
+        voteMeter.setText(comment.getVoteScore() + "");
+
+
+        if (comment.getMyVote() > 0){
+            voteMeter.setTextColor(Color.parseColor(question.getType().getColor()));
+            voteDownView.setTextColor(Color.parseColor("#BBBBBB"));
+            voteUpView.setTextColor(Color.parseColor(question.getType().getColor()));
+        } else if (comment.getMyVote() < 0) {
+            voteMeter.setTextColor(Color.parseColor(question.getType().getColor()));
+            voteDownView.setTextColor(Color.parseColor(question.getType().getColor()));
+            voteUpView.setTextColor(Color.parseColor("#BBBBBB"));
+        } else {
+            voteMeter.setTextColor(Color.parseColor("#BBBBBB"));
+            voteDownView.setTextColor(Color.parseColor("#BBBBBB"));
+            voteUpView.setTextColor(Color.parseColor("#BBBBBB"));
+        }
+    }
+
 
     private static class VoteUp extends AsyncTask<Void,Void,Comment> {
         private String commentId;

@@ -170,10 +170,10 @@ public class QuestionDetailActivity extends ListActivity {
             Object item = getItem(position);
             if (item instanceof Question) {
                 Question question = (Question) item;
-                QuestionViewUtil.fillView(convertView, question, QuestionDetailActivity.this);
+                QuestionViewUtil.fillView(convertView, question, QuestionDetailActivity.this, true);
             } else {
                 Comment comment = (Comment) item;
-                CommentViewUtil.fillView(convertView, comment, QuestionDetailActivity.this);
+                CommentViewUtil.fillView(convertView, comment, question, QuestionDetailActivity.this);
             }
 
             return convertView;

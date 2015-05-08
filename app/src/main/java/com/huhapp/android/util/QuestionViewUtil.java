@@ -3,6 +3,7 @@ package com.huhapp.android.util;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,23 +17,41 @@ import com.huhapp.android.huhapp.R;
  * Created by igbopie on 4/26/15.
  */
 public class QuestionViewUtil {
-    public static void fillView(View convertView, final Question question, final Context context) {
+    public static Integer QUESTION_TYPE_WIDTH = null;
+    public static Integer VOTER_WIDTH = null;
+
+    public static void fillView(View convertView, final Question question, final Context context, boolean showUser) {
 // Lookup view for data population
         TextView qText = (TextView) convertView.findViewById(R.id.qText);
         TextView qType = (TextView) convertView.findViewById(R.id.qType);
         final TextView voteDownView = (TextView) convertView.findViewById(R.id.voteDown);
         final TextView voteUpView = (TextView) convertView.findViewById(R.id.voteUp);
         final TextView voteMeter = (TextView) convertView.findViewById(R.id.voteMeter);
+        final View voter = convertView.findViewById(R.id.voter);
         TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
         TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
 
+        qText.setAutoLinkMask(Linkify.WEB_URLS);
+        qText.setLinksClickable(showUser);
         qText.setText(question.getText()+"?");
+
+        if (QUESTION_TYPE_WIDTH == null) {
+            qType.setText("WHERE");
+            qType.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            QUESTION_TYPE_WIDTH = qType.getMeasuredWidth();
+        }
+        qType.getLayoutParams().width = QUESTION_TYPE_WIDTH;
         qType.setText(question.getType().getWord());
+
         qType.setBackgroundColor(Color.parseColor(question.getType().getColor()));
-        createdText.setText(DateUtil.getDateInMillis(question.getCreated()));
+        String timeText = DateUtil.getDateInMillis(question.getCreated()) + "";
+        if (showUser) {
+            timeText += " by "+question.getUsername();
+        }
+        createdText.setText(timeText);
         repliesText.setText(question.getnComments() + " replies");
 
-        setVoter(question, voteMeter, voteUpView, voteDownView);
+        setVoter(question, voteMeter, voteUpView, voteDownView, voter);
 
         voteDownView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +62,7 @@ public class QuestionViewUtil {
                         if (result != null) {
                             question.setMyVote(result.getMyVote());
                             question.setVoteScore(result.getVoteScore());
-                            setVoter(question, voteMeter, voteUpView, voteDownView);
+                            setVoter(question, voteMeter, voteUpView, voteDownView, voter);
                         }
                     }
                 });
@@ -60,7 +79,7 @@ public class QuestionViewUtil {
                         if (result != null) {
                             question.setMyVote(result.getMyVote());
                             question.setVoteScore(result.getVoteScore());
-                            setVoter(question, voteMeter, voteUpView, voteDownView);
+                            setVoter(question, voteMeter, voteUpView, voteDownView, voter);
                         }
                     }
                 });
@@ -69,8 +88,17 @@ public class QuestionViewUtil {
         });
     }
 
-    private static void setVoter(Question question,TextView voteMeter,TextView voteUpView,TextView voteDownView) {
+    private static void setVoter(Question question,TextView voteMeter,TextView voteUpView,TextView voteDownView, View voter) {
+
+        if (VOTER_WIDTH == null) {
+            voteMeter.setText("9999");
+            voteMeter.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            VOTER_WIDTH = voteMeter.getMeasuredWidth();
+        }
+        voter.getLayoutParams().width = VOTER_WIDTH;
         voteMeter.setText(question.getVoteScore() + "");
+
+
         if (question.getMyVote() > 0){
             voteMeter.setTextColor(Color.parseColor(question.getType().getColor()));
             voteDownView.setTextColor(Color.parseColor("#BBBBBB"));

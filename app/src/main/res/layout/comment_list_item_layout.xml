@@ -1,83 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-      android:layout_width="match_parent"
-      android:layout_height="100dp"
-      android:orientation="horizontal"
-      android:gravity="center_vertical">
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    >
 
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_toRightOf="@+id/qType"
-        android:layout_toLeftOf="@+id/voter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         >
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/createdText"
-            android:text="1 minute ago"
-            android:paddingLeft="5dp"
             android:gravity="center_vertical"
             android:textColor="#c3c3c3"
-            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="8dp"
+            android:id="@+id/timeIcon"
+            fontPath="fonts/huh-font.ttf"
+            android:layout_alignParentBottom="true"
+            android:text="t"
+            android:textSize="10sp"
             />
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/createdText"
+            android:text="1d"
+            android:gravity="center_vertical"
+            android:textColor="#c3c3c3"
+            android:paddingLeft="5dp"
+            android:paddingBottom="7dp"
+            android:layout_toRightOf="@+id/timeIcon"
+            android:layout_alignParentBottom="true"
+            android:textSize="10sp"
+            />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/repliesText"
             android:text="2 replies"
             android:paddingLeft="5dp"
+            android:paddingBottom="7dp"
             android:gravity="center_vertical"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:textColor="#c3c3c3"
-            android:paddingBottom="5dp"
+            android:textSize="10sp"
             />
+
+
         <TextView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
+
+            android:minHeight="50dp"
             android:id="@+id/qText"
             android:text="time is it?"
-            android:paddingLeft="5dp"
-            android:gravity="center_vertical"
-            android:layout_below="@id/createdText"
-            android:layout_above="@id/repliesText"
+            android:paddingLeft="10dp"
+            android:paddingRight="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="7dp"
+
+            android:linksClickable="true"
+            android:autoLink="web"
 
 
             />
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/voter"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="center"
         >
-        <com.huhapp.android.customview.VoteUpView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:id="@+id/voteUp"
-           />
 
-        <com.huhapp.android.customview.VoteDownView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:id="@+id/voteDown"
-            android:layout_below="@+id/voteUp"
+        <TextView
+
+            fontPath="fonts/huh-font.ttf"
+            android:text="b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/voteUp"
+            android:textSize="24dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="#bbbbbb"
+            android:gravity="center"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
             />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9999"
+            android:id="@+id/voteMeter"
+            android:layout_below="@+id/voteUp"
+            android:textColor="#bbbbbb"
             android:gravity="center"
-            android:id="@+id/voteMeter"/>
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            />
+
+        <TextView
+
+            fontPath="fonts/huh-font.ttf"
+            android:text="u"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/voteDown"
+            android:layout_below="@+id/voteMeter"
+            android:textSize="24dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="#bbbbbb"
+            android:gravity="center"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            />
+
 
 
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

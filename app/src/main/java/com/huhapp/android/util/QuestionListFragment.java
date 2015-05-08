@@ -142,7 +142,7 @@ public class QuestionListFragment extends ListFragment
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.question_list_item_layout, parent, false);
             }
 
-            QuestionViewUtil.fillView(convertView, question, getActivity());
+            QuestionViewUtil.fillView(convertView, question, getActivity(), false);
 
             // Return the completed view to render on screen
             return convertView;
