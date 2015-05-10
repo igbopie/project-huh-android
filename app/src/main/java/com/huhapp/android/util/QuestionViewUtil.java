@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.text.util.Linkify;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Question;
+import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.customview.VoteDownView;
 import com.huhapp.android.customview.VoteUpView;
 import com.huhapp.android.huhapp.R;
@@ -30,10 +32,12 @@ public class QuestionViewUtil {
         final View voter = convertView.findViewById(R.id.voter);
         TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
         TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
+        View middlePartContainer = convertView.findViewById(R.id.middlePartContainer);
+        View questionContainer = convertView.findViewById(R.id.questionContainer);
 
         qText.setAutoLinkMask(Linkify.WEB_URLS);
         qText.setLinksClickable(showUser);
-        qText.setText(question.getText()+"?");
+        qText.setText(question.getText() + "?");
 
         if (QUESTION_TYPE_WIDTH == null) {
             qType.setText("WHERE");
@@ -52,6 +56,29 @@ public class QuestionViewUtil {
         repliesText.setText(question.getnComments() + " replies");
 
         setVoter(question, voteMeter, voteUpView, voteDownView, voter);
+
+
+        /*convertView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(convertView.getMeasuredWidth(), View.MeasureSpec.AT_MOST);
+        qText.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+        questionContainer.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+        middlePartContainer.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+        convertView.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+        //middlePartContainer.
+        /*if (middlePartContainer.getMeasuredHeight() < qText.getMeasuredHeight()) {
+            middlePartContainer.getLayoutParams().height = qText.getMeasuredHeight();
+        } else {
+            qText.getLayoutParams().height = middlePartContainer.getMeasuredHeight();
+        }
+        if (qText.getMeasuredHeight() < convertView.getMeasuredHeight()) {
+            qText.getLayoutParams().height = convertView.getMeasuredHeight();
+        } else {
+            qText.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+        Log.i("QUESTIONVIEWUTIL",  qText.getText()+ "");
+        Log.i("QUESTIONVIEWUTIL",  qText.getMeasuredHeight()+ "-" + middlePartContainer.getMeasuredHeight() + "-" + qText.getLineCount() +"-"+qText.getLineHeight() + "-"+ questionContainer.getMeasuredHeight()+ "-" + convertView.getMeasuredHeight());
+        */
 
         voteDownView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +113,8 @@ public class QuestionViewUtil {
                 voteUp.execute();
             }
         });
+
+
     }
 
     private static void setVoter(Question question,TextView voteMeter,TextView voteUpView,TextView voteDownView, View voter) {

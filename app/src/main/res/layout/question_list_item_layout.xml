@@ -4,9 +4,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
       android:layout_width="match_parent"
-      android:layout_height="fill_parent"
+      android:layout_height="wrap_content"
       android:orientation="horizontal"
       android:gravity="center_vertical"
+      android:id="@+id/questionContainer"
     >
     <TextView
         android:layout_width="wrap_content"
@@ -17,89 +18,97 @@
         android:textSize="18sp"
         android:textColor="#fff"
         android:background="#000"
-        android:paddingRight="5dp"
-        android:paddingLeft="5dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
         />
 
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/middlePartContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:textColor="#c3c3c3"
+            android:text="---inivisibletext---"
             android:paddingLeft="10dp"
+            android:paddingRight="0dp"
+            android:gravity="center_vertical"
+            android:textSize="10sp"
             android:paddingBottom="8dp"
-            android:id="@+id/timeIcon"
-            fontPath="fonts/huh-font.ttf"
-            android:layout_alignParentBottom="true"
-            android:text="t"
-            android:textSize="10sp"
+            android:visibility="invisible"
             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/createdText"
-            android:text="1d"
-            android:gravity="center_vertical"
-            android:textColor="#c3c3c3"
-            android:paddingLeft="5dp"
-            android:paddingBottom="7dp"
-            android:layout_toRightOf="@+id/timeIcon"
-            android:layout_alignParentBottom="true"
-            android:textSize="10sp"
-            />
-
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/repliesText"
-            android:text="2 replies"
-            android:paddingLeft="5dp"
-            android:paddingBottom="7dp"
-            android:gravity="center_vertical"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:textColor="#c3c3c3"
-            android:textSize="10sp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="r"
-            android:gravity="center_vertical"
-            android:textColor="#c3c3c3"
-            android:paddingLeft="5dp"
-            android:paddingBottom="8dp"
-            android:id="@+id/repliesIcon"
-            android:layout_toLeftOf="@+id/repliesText"
-            android:layout_alignParentBottom="true"
-            fontPath="fonts/huh-font.ttf"
-            android:textSize="10sp"
-            />
-
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-
             android:minHeight="50dp"
             android:id="@+id/qText"
             android:text="time is it?"
             android:paddingLeft="10dp"
             android:paddingRight="0dp"
             android:gravity="center_vertical"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-
             />
-    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                fontPath="fonts/huh-font.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="#c3c3c3"
+                android:paddingLeft="10dp"
+                android:paddingBottom="8dp"
+                android:id="@+id/timeIcon"
+                android:text="t"
+                android:textSize="10sp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/createdText"
+                android:text="1d"
+                android:gravity="center_vertical"
+                android:textColor="#c3c3c3"
+                android:paddingLeft="5dp"
+                android:paddingBottom="7dp"
+                android:layout_toRightOf="@+id/timeIcon"
+                android:textSize="10sp"
+                />
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/repliesText"
+                android:text="2 replies"
+                android:paddingLeft="5dp"
+                android:paddingBottom="7dp"
+                android:gravity="center_vertical"
+                android:layout_alignParentRight="true"
+                android:textColor="#c3c3c3"
+                android:textSize="10sp"
+                />
+
+            <TextView
+                fontPath="fonts/huh-font.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r"
+                android:gravity="center_vertical"
+                android:textColor="#c3c3c3"
+                android:paddingLeft="5dp"
+                android:paddingBottom="8dp"
+                android:id="@+id/repliesIcon"
+                android:layout_toLeftOf="@+id/repliesText"
+                android:textSize="10sp"
+                />
+        </RelativeLayout>
+    </LinearLayout>
     <RelativeLayout
         android:id="@+id/voter"
         android:layout_width="60dp"

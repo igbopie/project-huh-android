@@ -82,7 +82,7 @@ public class CreateQuestionActivity extends ListActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int charsLeft = MAX_CHARS - count;
+                int charsLeft = MAX_CHARS - s.length();
                 questionTextCounter.setText(charsLeft+"");
 
                 if (charsLeft < 0){
