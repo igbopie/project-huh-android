@@ -40,13 +40,13 @@ import android.widget.Toast;
 
 import com.huhapp.android.MainActivity;
 import com.huhapp.android.QuestionDetailActivity;
+import com.huhapp.android.R;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.common.view.SlidingTabLayout;
 import com.huhapp.android.customview.VoteDownView;
 import com.huhapp.android.customview.VoteUpView;
-import com.huhapp.android.huhapp.R;
 
 import java.util.ArrayList;
 import java.util.List;

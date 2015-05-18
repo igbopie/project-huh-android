@@ -1,6 +1,5 @@
 package com.huhapp.android;
 
-import com.huhapp.android.huhapp.R;
 import com.huhapp.android.util.PropertyAccessor;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;

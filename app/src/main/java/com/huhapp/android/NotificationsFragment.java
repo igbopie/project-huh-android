@@ -34,7 +34,6 @@ import android.widget.TextView;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Notification;
 import com.huhapp.android.api.model.Question;
-import com.huhapp.android.huhapp.R;
 import com.huhapp.android.util.DateUtil;
 import com.huhapp.android.util.PrefUtils;
 import com.huhapp.android.util.PropertyAccessor;

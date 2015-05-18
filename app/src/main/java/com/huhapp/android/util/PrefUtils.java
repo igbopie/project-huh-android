@@ -8,6 +8,8 @@ public class PrefUtils {
     public static final String PREFS_USER_ID = "__USER_ID__" ;
     public static final String PREFS_LAST_LONG = "__LAST_LONG__" ;
     public static final String PREFS_LAST_LAT = "__LAST_LAT__" ;
+    public static final String PREFS_REG_ID = "__REG_ID__";
+    public static final String PREFS_APP_VERSION = "__APP_ID__";
 
 
     /**
@@ -26,6 +28,13 @@ public class PrefUtils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final SharedPreferences.Editor editor = prefs.edit();
         editor.putFloat(key, value);
+        editor.commit();
+    }
+
+    public static void saveIntToPrefs(Context context, String key, int value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(key, value);
         editor.commit();
     }
 
@@ -51,6 +60,16 @@ public class PrefUtils {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         try {
             return sharedPrefs.getFloat(key, defaultValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return defaultValue;
+        }
+    }
+
+    public static int getIntFromPrefs(Context context, String key, int defaultValue) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        try {
+            return sharedPrefs.getInt(key, defaultValue);
         } catch (Exception e) {
             e.printStackTrace();
             return defaultValue;

@@ -35,6 +35,7 @@ import java.util.Map;
 public class Api {
     public static final String ENDPOINT = "https://huh-app.herokuapp.com/";
     public static final String ENDPOINT_USER_CREATE = "api/user/create";
+    public static final String ENDPOINT_USER_ADD_GCM_TOKEN = "api/user/addgcmtoken";
     public static final String ENDPOINT_NOTIFICATION_LIST = "api/notification/list";
     public static final String ENDPOINT_VOTE_UP = "api/vote/up";
     public static final String ENDPOINT_QUESTION_TYPE_LIST = "api/questiontype/list";
@@ -158,6 +159,13 @@ public class Api {
     public static String createUser() {
         Map<String, String> params = new HashMap<String, String>();
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_USER_CREATE, params, String.class);
+    }
+
+    public static String addGCMToken(String userId, String gcmToken) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("gcmtoken", gcmToken);
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_USER_ADD_GCM_TOKEN, params, String.class);
     }
 
     public static List<Question> getQuestionBySomething(String endpoint, String userId, double longitude, double latitude) {

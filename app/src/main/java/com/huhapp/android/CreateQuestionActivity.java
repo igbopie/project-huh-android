@@ -28,7 +28,6 @@ import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.api.model.QuestionType;
-import com.huhapp.android.huhapp.R;
 import com.huhapp.android.util.CommentViewUtil;
 import com.huhapp.android.util.PrefUtils;
 import com.huhapp.android.util.PropertyAccessor;

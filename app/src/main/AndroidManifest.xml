@@ -15,22 +15,33 @@
  limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.huhapp.android.huhapp"
+    package="com.huhapp.android"
     android:versionCode="1"
     android:versionName="1.0" >
 
+
+    <!--uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17"/-->
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="com.example.gcm.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
+
 
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <application
-        android:name="com.huhapp.android.Application"
+        android:name=".Application"
         android:allowBackup="true"
         android:icon="@drawable/huh"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.huhapp.android.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -40,7 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.huhapp.android.QuestionDetailActivity"
+            android:name=".QuestionDetailActivity"
             android:label="@string/title_activity_question_detail"
             android:parentActivityName="com.huhapp.android.MainActivity" >
             <meta-data
@@ -48,9 +59,19 @@
                 android:value="com.huhapp.android.MainActivity" />
         </activity>
         <activity
-            android:name="com.huhapp.android.CreateQuestionActivity"
+            android:name=".CreateQuestionActivity"
             android:label="@string/title_activity_create_question" >
         </activity>
+
+        <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.huhapp.android" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".GcmIntentService" />
     </application>
 
 </manifest>

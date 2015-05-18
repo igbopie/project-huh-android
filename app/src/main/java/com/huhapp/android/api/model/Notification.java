@@ -67,4 +67,16 @@ public class Notification implements Serializable {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "type='" + type + '\'' +
+                ", message='" + message + '\'' +
+                ", questionId='" + questionId + '\'' +
+                ", commentId='" + commentId + '\'' +
+                ", read=" + read +
+                ", created=" + created +
+                '}';
+    }
 }

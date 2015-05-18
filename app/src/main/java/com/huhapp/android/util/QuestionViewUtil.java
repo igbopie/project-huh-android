@@ -8,12 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.huhapp.android.R;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.customview.VoteDownView;
 import com.huhapp.android.customview.VoteUpView;
-import com.huhapp.android.huhapp.R;
 
 /**
  * Created by igbopie on 4/26/15.

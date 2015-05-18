@@ -31,17 +31,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.activities.SampleActivityBase;
 import com.huhapp.android.common.logger.Log;
-import com.huhapp.android.huhapp.R;
 import com.huhapp.android.util.MyLocationListener;
 import com.huhapp.android.util.PrefUtils;
 import com.huhapp.android.util.PropertyAccessor;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
+import java.io.IOException;
 import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -86,10 +89,16 @@ public class MainActivity extends SampleActivityBase {
 
         this.initLocation();
         this.initRes();
-
         new SignUp().execute();
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPlayServices();
+    }
+
 
     private void initLocation() {
         MyLocationListener.getInstance((LocationManager) getSystemService(LOCATION_SERVICE));
@@ -229,6 +238,7 @@ public class MainActivity extends SampleActivityBase {
             if (userId != null && userId.length() > 0) {
                 PropertyAccessor.setUserId(userId);
                 MainActivity.this.setSearchTabActive();
+                initNotification();
                 //Toast toast = Toast.makeText(MainActivity.this, "Signed up", Toast.LENGTH_SHORT);
                 //toast.show();
             } else {
@@ -238,4 +248,121 @@ public class MainActivity extends SampleActivityBase {
             }
         }
     }
+
+
+    // ANDROID NOTIFICATIONS
+    // TODO create a service or something for this...
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    /**
+     * Substitute you own sender ID here. This is the project number you got
+     * from the API Console, as described in "Getting Started."
+     */
+    private String SENDER_ID = "291110698380";
+    private GoogleCloudMessaging gcm;
+    private void initNotification() {
+        // Check device for Play Services APK.
+        if (checkPlayServices()) {
+            // If this check succeeds, proceed with normal processing.
+            // Otherwise, prompt user to get valid Play Services APK.
+            gcm = GoogleCloudMessaging.getInstance(this);
+            String regid = PropertyAccessor.getRegistrationId();
+
+            Log.i(TAG, "Your regId:"+ regid);
+
+            if (regid.isEmpty()) {
+                registerInBackground();
+            }
+        }
+    }
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Registers the application with GCM servers asynchronously.
+     * <p>
+     * Stores the registration ID and app versionCode in the application's
+     * shared preferences.
+     */
+    private void registerInBackground() {
+        new RegisterGCM().execute(null, null, null);
+    }
+
+    private class RegisterGCM extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+            String msg = "";
+            try {
+                if (gcm == null) {
+                    gcm = GoogleCloudMessaging.getInstance(MainActivity.this);
+                }
+                String regid = gcm.register(SENDER_ID);
+                msg = "Device registered, registration ID=" + regid;
+
+                // You should send the registration ID to your server over HTTP,
+                // so it can use GCM/HTTP or CCS to send messages to your app.
+                // The request to your server should be authenticated if your app
+                // is using accounts.
+                sendRegistrationIdToBackend(regid);
+
+                // For this demo: we don't need to send it because the device
+                // will send upstream messages to a server that echo back the
+                // message using the 'from' address in the message.
+
+                // Persist the registration ID - no need to register again.
+                PropertyAccessor.setRegistrationId(regid);
+            } catch (IOException ex) {
+                msg = "Error :" + ex.getMessage();
+                // If there is an error, don't just keep trying to register.
+                // Require the user to click a button again, or perform
+                // exponential back-off.
+            }
+            return msg;
+        }
+
+        @Override
+        protected void onPostExecute(String msg) {
+            Log.i(TAG, "GCM Registered");
+        }
+
+    }
+
+    private void sendRegistrationIdToBackend(String regId){
+        new RegisterGCMBackend(regId).execute();
+    }
+
+
+    private class RegisterGCMBackend extends AsyncTask<Void, Void, Void> {
+        String token;
+
+        private RegisterGCMBackend(String token) {
+            this.token = token;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Api.addGCMToken(PropertyAccessor.getUserId(), token);
+            Log.i(TAG, "GCM Registered Backend " + token);
+            return null;
+        }
+    }
+
 }

@@ -29,7 +29,6 @@ import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.logger.Log;
-import com.huhapp.android.huhapp.R;
 import com.huhapp.android.util.CommentViewUtil;
 import com.huhapp.android.util.PrefUtils;
 import com.huhapp.android.util.PropertyAccessor;
@@ -64,6 +63,7 @@ public class QuestionDetailActivity extends ListActivity {
 
 
         questionId = getIntent().getStringExtra(EXTRA_QUESTION_ID);
+        Log.i("QuestionDetailActivity", "QuestionId "+questionId);
         adapterArrayList = new ArrayList();
 
         // initiate the listadapter
@@ -208,8 +208,12 @@ public class QuestionDetailActivity extends ListActivity {
             SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
             mSwipeRefreshLayout.setRefreshing(false);
             adapterArrayList.clear();
-            adapterArrayList.add(question);
-            adapterArrayList.addAll(comments);
+            if (question != null) {
+                adapterArrayList.add(question);
+            }
+            if (comments != null) {
+                adapterArrayList.addAll(comments);
+            }
             adapter.notifyDataSetChanged();
         }
     }
