@@ -160,9 +160,11 @@ public class Api {
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_USER_CREATE, params, String.class);
     }
 
-    public static List<Question> getQuestionBySomething(String endpoint, String userId) {
+    public static List<Question> getQuestionBySomething(String endpoint, String userId, double longitude, double latitude) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("userId", userId);
+        params.put("longitude", longitude + "");
+        params.put("latitude", latitude  + "");
         return Api.makeRequestParsedForList(ENDPOINT + endpoint, params, Question.class);
     }
 
@@ -226,15 +228,14 @@ public class Api {
         return Api.makeRequestParsedForList(ENDPOINT + ENDPOINT_QUESTION_TYPE_LIST, params, QuestionType.class);
     }
 
-    public static Question questionCreate(String questionType, String text, String userId, String longitude, String latitude) {
+    public static Question questionCreate(String questionType, String text, String userId, double longitude, double latitude) {
         Map<String, String> params = new HashMap<String, String>();
 
         params.put("type", questionType);
         params.put("text", text);
         params.put("userId", userId);
-
-        //TODO longitude
-        //TODO latitude
+        params.put("longitude", longitude + "");
+        params.put("latitude", latitude  + "");
 
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_QUESTION_CREATE, params, Question.class);
     }

@@ -37,6 +37,7 @@ import com.huhapp.android.api.model.Question;
 import com.huhapp.android.huhapp.R;
 import com.huhapp.android.util.DateUtil;
 import com.huhapp.android.util.PrefUtils;
+import com.huhapp.android.util.PropertyAccessor;
 import com.huhapp.android.util.QuestionTabsFragment;
 import com.huhapp.android.util.QuestionViewUtil;
 
@@ -145,7 +146,7 @@ public class NotificationsFragment  extends ListFragment
 
         @Override
         protected List<Notification> doInBackground(Void... voids) {
-            return Api.notificationList(PrefUtils.getFromPrefs(getActivity(), PrefUtils.PREFS_USER_ID, ""));
+            return Api.notificationList(PropertyAccessor.getUserId());
         }
 
         @Override

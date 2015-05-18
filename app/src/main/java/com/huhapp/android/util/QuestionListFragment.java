@@ -163,7 +163,10 @@ public class QuestionListFragment extends ListFragment
 
         @Override
         protected List<Question> doInBackground(Void... voids) {
-            return Api.getQuestionBySomething(apiEndpoint, PrefUtils.getFromPrefs(getActivity(), PrefUtils.PREFS_USER_ID, ""));
+            return Api.getQuestionBySomething(apiEndpoint,
+                    PropertyAccessor.getUserId(),
+                    PropertyAccessor.getUserLongitude(),
+                    PropertyAccessor.getUserLatitude());
         }
 
         @Override

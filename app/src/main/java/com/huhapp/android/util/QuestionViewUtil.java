@@ -160,7 +160,7 @@ public class QuestionViewUtil {
 
         @Override
         protected Question doInBackground(Void... voids) {
-            return Api.questionVoteUp(questionId, PrefUtils.getFromPrefs(this.context, PrefUtils.PREFS_USER_ID, ""));
+            return Api.questionVoteUp(questionId, PropertyAccessor.getUserId());
         }
 
         @Override
@@ -187,7 +187,7 @@ public class QuestionViewUtil {
 
         @Override
         protected Question doInBackground(Void... voids) {
-            return Api.questionVoteDown(questionId, PrefUtils.getFromPrefs(this.context, PrefUtils.PREFS_USER_ID, ""));
+            return Api.questionVoteDown(questionId, PropertyAccessor.getUserId());
         }
 
         @Override

@@ -32,6 +32,7 @@ import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.huhapp.R;
 import com.huhapp.android.util.CommentViewUtil;
 import com.huhapp.android.util.PrefUtils;
+import com.huhapp.android.util.PropertyAccessor;
 import com.huhapp.android.util.QuestionViewUtil;
 
 import java.util.ArrayList;
@@ -196,11 +197,8 @@ public class QuestionDetailActivity extends ListActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            String userId = PrefUtils.getFromPrefs(QuestionDetailActivity.this, PrefUtils.PREFS_USER_ID, "");
-
-            question = Api.getQuestion(questionId, userId);
-            comments = Api.getComments(questionId, userId);
-
+            question = Api.getQuestion(questionId, PropertyAccessor.getUserId());
+            comments = Api.getComments(questionId, PropertyAccessor.getUserId());
             return null;
         }
 
@@ -233,8 +231,7 @@ public class QuestionDetailActivity extends ListActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            String userId = PrefUtils.getFromPrefs(QuestionDetailActivity.this, PrefUtils.PREFS_USER_ID, "");
-            Api.createComment(text, userId, questionId);
+            Api.createComment(text, PropertyAccessor.getUserId(), questionId);
             return null;
         }
 

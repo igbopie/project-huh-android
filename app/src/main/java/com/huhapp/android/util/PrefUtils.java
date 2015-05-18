@@ -6,6 +6,9 @@ import android.preference.PreferenceManager;
 
 public class PrefUtils {
     public static final String PREFS_USER_ID = "__USER_ID__" ;
+    public static final String PREFS_LAST_LONG = "__LAST_LONG__" ;
+    public static final String PREFS_LAST_LAT = "__LAST_LAT__" ;
+
 
     /**
      * Called to save supplied value in shared preferences against given key.
@@ -16,7 +19,13 @@ public class PrefUtils {
     public static void saveToPrefs(Context context, String key, String value) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(key,value);
+        editor.putString(key, value);
+        editor.commit();
+    }
+    public static void saveFloatToPrefs(Context context, String key, float value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putFloat(key, value);
         editor.commit();
     }
 
@@ -32,6 +41,16 @@ public class PrefUtils {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         try {
             return sharedPrefs.getString(key, defaultValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return defaultValue;
+        }
+    }
+
+    public static float getFloatFromPrefs(Context context, String key, float defaultValue) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        try {
+            return sharedPrefs.getFloat(key, defaultValue);
         } catch (Exception e) {
             e.printStackTrace();
             return defaultValue;

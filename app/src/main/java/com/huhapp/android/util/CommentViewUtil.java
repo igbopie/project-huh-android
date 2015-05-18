@@ -117,7 +117,7 @@ public class CommentViewUtil {
 
         @Override
         protected Comment doInBackground(Void... voids) {
-            return Api.commentVoteUp(commentId, PrefUtils.getFromPrefs(this.context, PrefUtils.PREFS_USER_ID, ""));
+            return Api.commentVoteUp(commentId, PropertyAccessor.getUserId());
         }
 
         @Override
@@ -144,7 +144,7 @@ public class CommentViewUtil {
 
         @Override
         protected Comment doInBackground(Void... voids) {
-            return Api.commentVoteDown(questionId, PrefUtils.getFromPrefs(this.context, PrefUtils.PREFS_USER_ID, ""));
+            return Api.commentVoteDown(questionId, PropertyAccessor.getUserId());
         }
 
         @Override

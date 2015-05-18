@@ -1,6 +1,7 @@
 package com.huhapp.android;
 
 import com.huhapp.android.huhapp.R;
+import com.huhapp.android.util.PropertyAccessor;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -17,6 +18,6 @@ public class Application extends android.app.Application {
                         .setFontAttrId(R.attr.fontPath)
                         .build()
         );
-
+        PropertyAccessor.init(getApplicationContext());
     }
 }

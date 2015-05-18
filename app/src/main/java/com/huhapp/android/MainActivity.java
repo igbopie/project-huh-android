@@ -20,6 +20,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,7 +36,9 @@ import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.activities.SampleActivityBase;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.huhapp.R;
+import com.huhapp.android.util.MyLocationListener;
 import com.huhapp.android.util.PrefUtils;
+import com.huhapp.android.util.PropertyAccessor;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
@@ -78,10 +83,16 @@ public class MainActivity extends SampleActivityBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        this.initLocation();
         this.initRes();
 
         new SignUp().execute();
 
+    }
+
+    private void initLocation() {
+        MyLocationListener.getInstance((LocationManager) getSystemService(LOCATION_SERVICE));
     }
 
     private void initRes(){
@@ -204,7 +215,7 @@ public class MainActivity extends SampleActivityBase {
 
         @Override
         protected String doInBackground(Void... voids) {
-            String userId = PrefUtils.getFromPrefs(MainActivity.this, PrefUtils.PREFS_USER_ID, "");
+            String userId = PropertyAccessor.getUserId();
             if (userId == null || userId.length() == 0) {
                 return Api.createUser();
             } else {
@@ -216,7 +227,7 @@ public class MainActivity extends SampleActivityBase {
         protected void onPostExecute(String userId) {
             super.onPostExecute(userId);
             if (userId != null && userId.length() > 0) {
-                PrefUtils.saveToPrefs(MainActivity.this, PrefUtils.PREFS_USER_ID, userId);
+                PropertyAccessor.setUserId(userId);
                 MainActivity.this.setSearchTabActive();
                 //Toast toast = Toast.makeText(MainActivity.this, "Signed up", Toast.LENGTH_SHORT);
                 //toast.show();

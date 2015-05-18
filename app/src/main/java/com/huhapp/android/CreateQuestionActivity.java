@@ -31,6 +31,7 @@ import com.huhapp.android.api.model.QuestionType;
 import com.huhapp.android.huhapp.R;
 import com.huhapp.android.util.CommentViewUtil;
 import com.huhapp.android.util.PrefUtils;
+import com.huhapp.android.util.PropertyAccessor;
 import com.huhapp.android.util.QuestionViewUtil;
 
 import java.util.ArrayList;
@@ -243,7 +244,11 @@ public class CreateQuestionActivity extends ListActivity {
 
         @Override
         protected Question doInBackground(Void... voids) {
-            return Api.questionCreate(this.questionType.getWord(), this.text, PrefUtils.getFromPrefs(CreateQuestionActivity.this, PrefUtils.PREFS_USER_ID, ""), null, null);
+            return Api.questionCreate(this.questionType.getWord(),
+                    this.text,
+                    PropertyAccessor.getUserId(),
+                    PropertyAccessor.getUserLongitude(),
+                    PropertyAccessor.getUserLatitude());
         }
 
         @Override
