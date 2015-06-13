@@ -20,16 +20,72 @@
       android:layout_height="match_parent"
       android:id="@+id/sample_main_layout">
 
-    <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          android:background="@android:color/darker_gray" />
 
     <FrameLayout
           android:id="@+id/sample_content_fragment"
           android:layout_weight="2"
           android:layout_width="match_parent"
           android:layout_height="0px" />
+
+    <LinearLayout
+        android:id="@+id/mainTabView"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        >
+        <ImageButton
+            android:id="@+id/search"
+            android:src="@drawable/eye"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:background="@color/buttonTabColor"/>
+
+        <ImageButton
+            android:id="@+id/me"
+            android:src="@drawable/me"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:background="@color/buttonTabColor"/>
+
+        <ImageButton
+            android:id="@+id/add"
+            android:src="@drawable/question"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:background="@color/buttonTabMainColor"/>
+
+        <ImageButton
+
+            android:id="@+id/notifications"
+            android:src="@drawable/notification"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:background="@color/buttonTabColor"/>
+
+        <ImageButton
+            android:id="@+id/more"
+            android:src="@drawable/more"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:background="@color/buttonTabColor"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>
 

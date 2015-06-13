@@ -15,19 +15,5 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/search"
-          android:showAsAction="always"
-          android:title=""/>
-    <item android:id="@+id/me"
-        android:showAsAction="always"
-        android:title=""/>
-    <item android:id="@+id/notifications"
-        android:showAsAction="always"
-        android:title=""/>
-    <item android:id="@+id/more"
-        android:showAsAction="always"
-        android:title=""/>
-    <item android:id="@+id/add"
-        android:showAsAction="always"
-        android:title=""/>
+
 </menu>

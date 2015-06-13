@@ -18,6 +18,7 @@ package com.huhapp.android;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -29,6 +30,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -56,7 +61,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * For devices with displays with a width of 720dp or greater, the sample log is always visible,
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
-public class MainActivity extends SampleActivityBase {
+public class MainActivity extends SampleActivityBase implements ImageButton.OnClickListener {
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -64,18 +69,6 @@ public class MainActivity extends SampleActivityBase {
     }
 
     public static final String TAG = "MainActivity";
-
-    private Drawable faSearchDeactive;
-    private Drawable faSearchActive;
-    private Drawable faUserDeactive;
-    private Drawable faUserActive;
-    private Drawable faBellODeactive;
-    private Drawable faBellOActive;
-    private Drawable faEllipsisHDeactive;
-    private Drawable faEllipsisHActive;
-    private Drawable faAddDeactive;
-    private Drawable faAddActive;
-    private Menu menu;
 
     private Fragment currentFragment;
 
@@ -88,8 +81,18 @@ public class MainActivity extends SampleActivityBase {
 
 
         this.initLocation();
-        this.initRes();
         new SignUp().execute();
+
+        ImageButton search = (ImageButton) findViewById(R.id.search);
+        search.setOnClickListener(this);
+        ImageButton me = (ImageButton) findViewById(R.id.me);
+        me.setOnClickListener(this);
+        ImageButton add = (ImageButton) findViewById(R.id.add);
+        add.setOnClickListener(this);
+        ImageButton notifications = (ImageButton) findViewById(R.id.notifications);
+        notifications.setOnClickListener(this);
+        ImageButton more = (ImageButton) findViewById(R.id.more);
+        more.setOnClickListener(this);
 
     }
 
@@ -104,72 +107,38 @@ public class MainActivity extends SampleActivityBase {
         MyLocationListener.getInstance((LocationManager) getSystemService(LOCATION_SERVICE));
     }
 
-    private void initRes(){
-        faSearchDeactive = new IconDrawable(this, Iconify.IconValue.fa_search).colorRes(R.color.deactive).actionBarSize();
-        faSearchActive = new IconDrawable(this, Iconify.IconValue.fa_search).colorRes(R.color.active).actionBarSize();
-        faUserDeactive = new IconDrawable(this, Iconify.IconValue.fa_user).colorRes(R.color.deactive).actionBarSize();
-        faUserActive = new IconDrawable(this, Iconify.IconValue.fa_user).colorRes(R.color.active).actionBarSize();
-        faBellODeactive = new IconDrawable(this, Iconify.IconValue.fa_bell_o).colorRes(R.color.deactive).actionBarSize();
-        faBellOActive = new IconDrawable(this, Iconify.IconValue.fa_bell_o).colorRes(R.color.active).actionBarSize();
-        faEllipsisHDeactive = new IconDrawable(this, Iconify.IconValue.fa_ellipsis_h).colorRes(R.color.deactive).actionBarSize();
-        faEllipsisHActive = new IconDrawable(this, Iconify.IconValue.fa_ellipsis_h).colorRes(R.color.active).actionBarSize();
-        faAddDeactive = new IconDrawable(this, Iconify.IconValue.fa_plus_circle).colorRes(R.color.active).actionBarSize();
-        faAddActive = new IconDrawable(this, Iconify.IconValue.fa_plus_circle).colorRes(R.color.active).actionBarSize();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        this.menu = menu;
-        this.setDeactiveIcons();
-        this.menu.findItem(R.id.search).setIcon(faSearchActive);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    private void setDeactiveIcons() {
-        getActionBar().setIcon(android.R.color.transparent);
-        this.menu.findItem(R.id.search).setIcon(faSearchDeactive);
-        this.menu.findItem(R.id.me).setIcon(faUserDeactive);
-        this.menu.findItem(R.id.notifications).setIcon(faBellODeactive);
-        this.menu.findItem(R.id.more).setIcon(faEllipsisHDeactive);
-        this.menu.findItem(R.id.add).setIcon(faAddDeactive);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
+    public void onClick(View v) {
         //I don't want to change the others icon
-        if (item.getItemId() == R.id.add) {
+        if (v.getId() == R.id.add) {
             this.createQuestion();
-            return true;
+            return;
         }
 
-        this.setDeactiveIcons();
-        //item.getIcon().setC
-        switch(item.getItemId()) {
+        switch(v.getId()) {
             case R.id.search:
-                item.setIcon(faSearchActive);
+                //item.setIcon(faSearchActive);
                 this.setSearchTabActive();
-                return true;
+                return;
             case R.id.me:
-                item.setIcon(faUserActive);
+                //item.setIcon(faUserActive);
                 this.setMeTabActive();
-                return true;
+                return;
             case R.id.notifications:
-                item.setIcon(faBellOActive);
+                //item.setIcon(faBellOActive);
                 this.setNotificationTabActive();
-                return true;
+                return;
             case R.id.more:
-                item.setIcon(faEllipsisHActive);
-                return true;
+                //item.setIcon(faEllipsisHActive);
+                return;
         }
-        return super.onOptionsItemSelected(item);
     }
+
 
     private void setSearchTabActive() {
         this.setFragment(new SearchFragment());
@@ -211,6 +180,8 @@ public class MainActivity extends SampleActivityBase {
 
         currentFragment = fragment;
     }
+
+
 
     private class SignUp extends AsyncTask<Void,Void,String> {
 

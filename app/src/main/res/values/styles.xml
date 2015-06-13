@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="buttonTabColor"  >#353535</color>
+    <color name="buttonTabMainColor"  >#a077d5</color>
+
 </resources>
