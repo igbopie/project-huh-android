@@ -85,6 +85,7 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
 
         ImageButton search = (ImageButton) findViewById(R.id.search);
         search.setOnClickListener(this);
+        search.setBackgroundColor(getResources().getColor(R.color.buttonTabActiveColor));
         ImageButton me = (ImageButton) findViewById(R.id.me);
         me.setOnClickListener(this);
         ImageButton add = (ImageButton) findViewById(R.id.add);
@@ -93,8 +94,9 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         notifications.setOnClickListener(this);
         ImageButton more = (ImageButton) findViewById(R.id.more);
         more.setOnClickListener(this);
-
     }
+
+
 
     @Override
     protected void onResume() {
@@ -112,6 +114,18 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+    private void resetTabColors(){
+        ImageButton search = (ImageButton) findViewById(R.id.search);
+        ImageButton me = (ImageButton) findViewById(R.id.me);
+        ImageButton more = (ImageButton) findViewById(R.id.more);
+        ImageButton notifications = (ImageButton) findViewById(R.id.notifications);
+        search.setBackgroundColor(getResources().getColor(R.color.buttonTabColor));
+        me.setBackgroundColor(getResources().getColor(R.color.buttonTabColor));
+        more.setBackgroundColor(getResources().getColor(R.color.buttonTabColor));
+        notifications.setBackgroundColor(getResources().getColor(R.color.buttonTabColor));
+    }
+
     @Override
     public void onClick(View v) {
         //I don't want to change the others icon
@@ -119,7 +133,8 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
             this.createQuestion();
             return;
         }
-
+        this.resetTabColors();
+        v.setBackgroundColor(getResources().getColor(R.color.buttonTabActiveColor));
         switch(v.getId()) {
             case R.id.search:
                 //item.setIcon(faSearchActive);
