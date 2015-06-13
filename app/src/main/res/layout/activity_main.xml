@@ -36,53 +36,29 @@
         <ImageButton
             android:id="@+id/search"
             android:src="@drawable/eye"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:background="@color/buttonTabColor"/>
+            style="@style/BottomTabBarItemStyle"/>
 
         <ImageButton
             android:id="@+id/me"
             android:src="@drawable/me"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:background="@color/buttonTabColor"/>
+            style="@style/BottomTabBarItemStyle"/>
 
         <ImageButton
             android:id="@+id/add"
             android:src="@drawable/question"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
+            style="@style/BottomTabBarItemStyle"
             android:background="@color/buttonTabMainColor"/>
 
         <ImageButton
 
             android:id="@+id/notifications"
             android:src="@drawable/notification"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:background="@color/buttonTabColor"/>
+            style="@style/BottomTabBarItemStyle"/>
 
         <ImageButton
             android:id="@+id/more"
             android:src="@drawable/more"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:background="@color/buttonTabColor"/>
+            style="@style/BottomTabBarItemStyle"/>
 
 
     </LinearLayout>

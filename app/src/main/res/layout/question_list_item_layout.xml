@@ -1,121 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:gravity="center_vertical"
       android:id="@+id/questionContainer"
     >
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:id="@+id/qType"
-        android:text="What"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="#fff"
-        android:background="#000"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        />
+        >
+        <View
+            android:id="@+id/qType"
+            android:layout_width="25dp"
+            android:layout_height="fill_parent"
+            android:background="#000"
+            />
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="@dimen/questionImageSize"
+            android:layout_height="@dimen/questionImageSize"
+            android:padding="5dp"
+            android:background="@drawable/circle"
+            android:layout_marginTop="@dimen/questionTopBottomMargin"
+            android:layout_marginLeft="@dimen/questionLeftMargin"
+            android:scaleType="fitCenter"
+            />
+
+
+    </RelativeLayout>
 
 
     <LinearLayout
         android:orientation="vertical"
         android:id="@+id/middlePartContainer"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/questionTopBottomMargin"
         >
         <TextView
+            android:id="@+id/username"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="---inivisibletext---"
-            android:paddingLeft="10dp"
-            android:paddingRight="0dp"
+            android:layout_height="@dimen/questionImageSize"
+            android:layout_marginLeft="@dimen/questionLeftMargin"
+            android:layout_marginStart="@dimen/questionLeftMargin"
+            android:textSize="@dimen/questionSmallFontSize"
+            android:textColor="@color/questionSmallFontColor"
+            android:text="John ask..."
             android:gravity="center_vertical"
-            android:textSize="10sp"
-            android:paddingBottom="8dp"
-            android:visibility="invisible"
             />
         <TextView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:minHeight="50dp"
+            android:layout_height="wrap_content"
             android:id="@+id/qText"
+            android:minHeight="25dp"
+            android:layout_marginLeft="@dimen/questionLeftMargin"
             android:text="time is it?"
-            android:paddingLeft="10dp"
-            android:paddingRight="0dp"
             android:gravity="center_vertical"
             />
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/questionLeftMargin"
+            android:layout_marginStart="@dimen/questionLeftMargin"
+            android:layout_marginBottom="@dimen/questionTopBottomMargin"
+            android:layout_marginTop="@dimen/questionMetaTopMargin"
+            >
             <TextView
-                fontPath="fonts/huh-font.ttf"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:textColor="#c3c3c3"
-                android:paddingLeft="10dp"
-                android:paddingBottom="8dp"
-                android:id="@+id/timeIcon"
-                android:text="t"
-                android:textSize="10sp"
-                />
-            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:textSize="@dimen/questionSmallFontSize"
+                android:textColor="@color/questionSmallFontColor"
+                android:gravity="bottom"
                 android:id="@+id/createdText"
                 android:text="1d"
-                android:gravity="center_vertical"
-                android:textColor="#c3c3c3"
-                android:paddingLeft="5dp"
-                android:paddingBottom="7dp"
-                android:layout_toRightOf="@+id/timeIcon"
-                android:textSize="10sp"
                 />
-
-
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/repliesText"
-                android:text="2 replies"
-                android:paddingLeft="5dp"
-                android:paddingBottom="7dp"
-                android:gravity="center_vertical"
+                android:textSize="@dimen/questionSmallFontSize"
+                android:textColor="@color/questionSmallFontColor"
+                android:gravity="bottom"
                 android:layout_alignParentRight="true"
-                android:textColor="#c3c3c3"
-                android:textSize="10sp"
-                />
-
-            <TextView
-                fontPath="fonts/huh-font.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="r"
-                android:gravity="center_vertical"
-                android:textColor="#c3c3c3"
-                android:paddingLeft="5dp"
-                android:paddingBottom="8dp"
-                android:id="@+id/repliesIcon"
-                android:layout_toLeftOf="@+id/repliesText"
-                android:textSize="10sp"
+                android:layout_alignParentEnd="true"
+                android:text="2 replies"
                 />
         </RelativeLayout>
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/voter"
         android:layout_width="60dp"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:gravity="center"
+        android:layout_marginBottom="@dimen/questionTopBottomMargin"
+        android:layout_marginTop="@dimen/questionTopBottomMargin"
+        android:layout_marginLeft="@dimen/questionLeftMargin"
+        android:layout_marginRight="@dimen/questionLeftMargin"
         >
 
         <TextView
@@ -126,7 +111,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/voteUp"
             android:textSize="24dp"
-            android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:textColor="#bbbbbb"
             android:gravity="center"
@@ -142,8 +126,6 @@
             android:layout_below="@+id/voteUp"
             android:textColor="#bbbbbb"
             android:gravity="center"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             />
@@ -158,7 +140,6 @@
             android:layout_below="@+id/voteMeter"
             android:textSize="24dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp"
             android:textColor="#bbbbbb"
             android:gravity="center"
             android:layout_alignParentLeft="true"

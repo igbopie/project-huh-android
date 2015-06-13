@@ -15,14 +15,61 @@
   -->
 
 <resources>
+    <!-- colors -->
+    <color name="buttonTabColor"  >#353535</color>
+    <color name="buttonTabActiveColor"  >#202020</color>
+    <color name="buttonTabMainColor"  >#a077d5</color>
+    <color name="deactive">#7f8c8d</color>
+    <color name="active">#f39c12</color>
+    <color name="white">#ffffff</color>
+    <color name="questionSmallFontColor">#c3c3c3</color>
+
+    <!-- Dimen -->
+    <dimen name="questionTopBottomMargin">10dp</dimen>
+    <dimen name="questionMetaTopMargin">7dp</dimen>
+    <dimen name="questionLeftMargin">10dp</dimen>
+    <dimen name="questionImageSize">30dp</dimen>
+    <dimen name="questionSmallFontSize">12sp</dimen>
 
     <!-- Activity themes -->
 
-    <style name="Theme.Base" parent="android:Theme.Holo.Light" />
+    <style name="Theme.Base" parent="@android:style/Theme.Holo.Light" />
 
     <style name="Theme.Sample" parent="Theme.Base" />
 
-    <style name="AppTheme" parent="Theme.Sample" />
+    <style name="AppTheme" parent="Theme.Sample" >
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@color/buttonTabMainColor</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="MyActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TopTabBarItemStyle" >
+        <!--item name="android:backgroundTint">@color/buttonTabColor</item -->
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="TopTabBarStyle" >
+        <item name="android:background">@color/buttonTabColor</item>
+    </style>
+
+    <style name="BottomTabBarItemStyle" >
+        <item name="android:layout_width" >0px</item>
+        <item name="android:layout_height" >match_parent</item>
+        <item name="android:layout_weight" >1</item>
+        <item name="android:layout_gravity" >center</item>
+        <item name="android:scaleType" >fitCenter</item>
+        <item name="android:background" >@color/buttonTabColor</item>
+    </style>
+
     <!-- Widget styling -->
 
     <style name="Widget" />

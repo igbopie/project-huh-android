@@ -3,9 +3,13 @@ package com.huhapp.android.util;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.huhapp.android.R;
@@ -14,39 +18,48 @@ import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.customview.VoteDownView;
 import com.huhapp.android.customview.VoteUpView;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by igbopie on 4/26/15.
  */
 public class QuestionViewUtil {
-    public static Integer QUESTION_TYPE_WIDTH = null;
     public static Integer VOTER_WIDTH = null;
 
     public static void fillView(View convertView, final Question question, final Context context, boolean showUser) {
 // Lookup view for data population
         TextView qText = (TextView) convertView.findViewById(R.id.qText);
-        TextView qType = (TextView) convertView.findViewById(R.id.qType);
+        View qType = convertView.findViewById(R.id.qType);
         final TextView voteDownView = (TextView) convertView.findViewById(R.id.voteDown);
         final TextView voteUpView = (TextView) convertView.findViewById(R.id.voteUp);
         final TextView voteMeter = (TextView) convertView.findViewById(R.id.voteMeter);
         final View voter = convertView.findViewById(R.id.voter);
         TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
         TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
+        TextView username = (TextView) convertView.findViewById(R.id.username);
         View middlePartContainer = convertView.findViewById(R.id.middlePartContainer);
         View questionContainer = convertView.findViewById(R.id.questionContainer);
+        ImageView image = (ImageView) convertView.findViewById(R.id.userImage);
+
+        username.setText(question.getUsername()+" asks...");
+        Picasso.with(context)
+                .load(Api.getImageUrl(question))
+                //.resize(50, 50)
+                //.centerCrop()
+                .into(image);
 
         qText.setAutoLinkMask(Linkify.WEB_URLS);
         qText.setLinksClickable(showUser);
-        qText.setText(question.getText() + "?");
 
-        if (QUESTION_TYPE_WIDTH == null) {
-            qType.setText("WHERE");
-            qType.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            QUESTION_TYPE_WIDTH = qType.getMeasuredWidth();
-        }
-        qType.getLayoutParams().width = QUESTION_TYPE_WIDTH;
-        qType.setText(question.getType().getWord());
 
+        Spanned text = Html.fromHtml(
+                String.format("<font color=\"%s\">%s</font> %s?",
+                        question.getType().getColor(),
+                        question.getType().getWord(),
+                        question.getText()
+                )
+        );
+        qText.setText(text);
         qType.setBackgroundColor(Color.parseColor(question.getType().getColor()));
         String timeText = DateUtil.getDateInMillis(question.getCreated()) + "";
         if (showUser) {
@@ -56,29 +69,6 @@ public class QuestionViewUtil {
         repliesText.setText(question.getnComments() + " replies");
 
         setVoter(question, voteMeter, voteUpView, voteDownView, voter);
-
-
-        /*convertView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(convertView.getMeasuredWidth(), View.MeasureSpec.AT_MOST);
-        qText.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-        questionContainer.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-        middlePartContainer.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-        convertView.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-        //middlePartContainer.
-        /*if (middlePartContainer.getMeasuredHeight() < qText.getMeasuredHeight()) {
-            middlePartContainer.getLayoutParams().height = qText.getMeasuredHeight();
-        } else {
-            qText.getLayoutParams().height = middlePartContainer.getMeasuredHeight();
-        }
-        if (qText.getMeasuredHeight() < convertView.getMeasuredHeight()) {
-            qText.getLayoutParams().height = convertView.getMeasuredHeight();
-        } else {
-            qText.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        }
-        Log.i("QUESTIONVIEWUTIL",  qText.getText()+ "");
-        Log.i("QUESTIONVIEWUTIL",  qText.getMeasuredHeight()+ "-" + middlePartContainer.getMeasuredHeight() + "-" + qText.getLineCount() +"-"+qText.getLineHeight() + "-"+ questionContainer.getMeasuredHeight()+ "-" + convertView.getMeasuredHeight());
-        */
 
         voteDownView.setOnClickListener(new View.OnClickListener() {
             @Override

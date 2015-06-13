@@ -58,6 +58,11 @@ public class Api {
     public static final String JSON_TAG_MESSAGE = "message";
     public static final String JSON_TAG_RESPONSE = "response";
 
+    public static String getImageUrl(Question question) {
+        return ENDPOINT + "images/usericons/" + question.getUsername().toLowerCase() + ".png";
+
+    }
+
     private static ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
     //NO NEED FOR DATE DESERIALIZER
                 /*SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null))

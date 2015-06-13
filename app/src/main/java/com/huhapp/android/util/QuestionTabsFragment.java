@@ -87,6 +87,7 @@ public abstract class QuestionTabsFragment extends Fragment {
         // it's PagerAdapter set.
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.tab_view_container, R.id.text);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.buttonTabMainColor));
         mSlidingTabLayout.setViewPager(mViewPager);
         // END_INCLUDE (setup_slidingtablayout)
     }
