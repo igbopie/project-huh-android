@@ -3,8 +3,10 @@ package com.huhapp.android.util;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.huhapp.android.api.Api;
 import com.huhapp.android.common.logger.Log;
 
 /**
@@ -37,6 +39,7 @@ public class MyLocationListener implements LocationListener {
         double longitude = location.getLongitude();
         PropertyAccessor.setUserLatitude(latitude);
         PropertyAccessor.setUserLongitude(longitude);
+        new RegisterLocation(longitude, latitude).execute();
         Log.i("LOCATIONMANAGER", "Lat "+ latitude+" Long "+longitude);
 
     }
@@ -54,5 +57,21 @@ public class MyLocationListener implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    private class RegisterLocation extends AsyncTask<Void, Void, Void> {
+        double longitude;
+        double latitude;
+
+        private RegisterLocation(double longitude, double latitude) {
+            this.longitude = longitude;
+            this.latitude = latitude;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Api.addLocation(PropertyAccessor.getUserId(), longitude, latitude);
+            return null;
+        }
     }
 }

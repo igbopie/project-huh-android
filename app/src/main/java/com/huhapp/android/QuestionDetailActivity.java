@@ -1,9 +1,11 @@
 package com.huhapp.android;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -71,10 +73,11 @@ public class QuestionDetailActivity extends ListActivity {
 
         // assign the list adapter
         setListAdapter(adapter);
-
-
-
         setContentView(R.layout.activity_question_detail);
+
+        if (getActionBar()!= null) {
+            getActionBar().setTitle("Loading...");
+        }
 
         textBoxButton = (TextView) findViewById(R.id.textBoxButton);
         textBoxInput = (EditText) findViewById(R.id.textBoxInput);
@@ -151,7 +154,7 @@ public class QuestionDetailActivity extends ListActivity {
             if (type == 0) {
                 return LayoutInflater.from(getContext()).inflate(R.layout.question_list_item_layout, parent, false);
             } else {
-                return LayoutInflater.from(getContext()).inflate(R.layout.comment_list_item_layout, parent, false);
+                return LayoutInflater.from(getContext()).inflate(R.layout.question_list_item_layout, parent, false);
             }
         }
 
@@ -215,6 +218,12 @@ public class QuestionDetailActivity extends ListActivity {
                 adapterArrayList.addAll(comments);
             }
             adapter.notifyDataSetChanged();
+
+            ActionBar mActionBar = getActionBar();
+            mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(question.getType().getColor())));
+            mActionBar.setDisplayShowTitleEnabled(false);
+            mActionBar.setDisplayShowTitleEnabled(true);
+            mActionBar.setTitle(question.getType().getWord());
         }
     }
 

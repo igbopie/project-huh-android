@@ -3,7 +3,11 @@ package com.huhapp.android.util;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.util.Linkify;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.huhapp.android.R;
@@ -12,6 +16,7 @@ import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.customview.VoteDownView;
 import com.huhapp.android.customview.VoteUpView;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by igbopie on 4/26/15.
@@ -24,24 +29,35 @@ public class CommentViewUtil {
     public static void fillView(View convertView, final Comment comment, final Question question, final Context context) {
 // Lookup view for data population
         TextView qText = (TextView) convertView.findViewById(R.id.qText);
+        View qType = convertView.findViewById(R.id.qType);
         final TextView voteDownView = (TextView) convertView.findViewById(R.id.voteDown);
         final TextView voteUpView = (TextView) convertView.findViewById(R.id.voteUp);
         final TextView voteMeter = (TextView) convertView.findViewById(R.id.voteMeter);
-        final View voter =  convertView.findViewById(R.id.voter);
+        final View voter = convertView.findViewById(R.id.voter);
         TextView createdText = (TextView) convertView.findViewById(R.id.createdText);
         TextView repliesText = (TextView) convertView.findViewById(R.id.repliesText);
+        TextView username = (TextView) convertView.findViewById(R.id.username);
+        ImageView image = (ImageView) convertView.findViewById(R.id.userImage);
 
+        username.setText(comment.getUsername()+" says...");
+        Picasso.with(context)
+                .load(Api.getImageUrl(comment))
+                        //.resize(50, 50)
+                        //.centerCrop()
+                .into(image);
+
+        qText.setAutoLinkMask(Linkify.WEB_URLS);
         qText.setText(comment.getText());
-        createdText.setText(DateUtil.getDateInMillis(comment.getCreated()));
-        repliesText.setText(comment.getUsername());
-
+        qType.setVisibility(View.INVISIBLE);
+        createdText.setText(DateUtil.getDateInMillis(comment.getCreated()) + "");
+        repliesText.setVisibility(View.INVISIBLE);
 
         setVoter(comment, question, voteMeter, voteUpView, voteDownView, voter);
 
         voteDownView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VoteDown questionVoteUp = new VoteDown(comment.getId(), context, new OnTaskCompleted<Comment>() {
+                VoteDown voteUp = new VoteDown(comment.getId(), context, new OnTaskCompleted<Comment>() {
                     @Override
                     public void onTaskCompleted(Comment result) {
                         if (result != null) {
@@ -51,14 +67,14 @@ public class CommentViewUtil {
                         }
                     }
                 });
-                questionVoteUp.execute();
+                voteUp.execute();
             }
         });
 
         voteUpView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VoteUp questionVoteUp = new VoteUp(comment.getId(), context, new OnTaskCompleted<Comment>() {
+                VoteUp voteUp = new VoteUp(comment.getId(), context, new OnTaskCompleted<Comment>() {
                     @Override
                     public void onTaskCompleted(Comment result) {
                         if (result != null) {
@@ -68,7 +84,7 @@ public class CommentViewUtil {
                         }
                     }
                 });
-                questionVoteUp.execute();
+                voteUp.execute();
             }
         });
     }

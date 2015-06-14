@@ -61,11 +61,7 @@ public class QuestionViewUtil {
         );
         qText.setText(text);
         qType.setBackgroundColor(Color.parseColor(question.getType().getColor()));
-        String timeText = DateUtil.getDateInMillis(question.getCreated()) + "";
-        if (showUser) {
-            timeText += " by "+question.getUsername();
-        }
-        createdText.setText(timeText);
+        createdText.setText(DateUtil.getDateInMillis(question.getCreated()) + "");
         repliesText.setText(question.getnComments() + " replies");
 
         setVoter(question, voteMeter, voteUpView, voteDownView, voter);

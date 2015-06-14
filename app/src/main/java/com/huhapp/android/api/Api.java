@@ -35,6 +35,7 @@ import java.util.Map;
 public class Api {
     public static final String ENDPOINT = "https://huh-app.herokuapp.com/";
     public static final String ENDPOINT_USER_CREATE = "api/user/create";
+    public static final String ENDPOINT_USER_ADD_LOCATION = "api/user/location";
     public static final String ENDPOINT_USER_ADD_GCM_TOKEN = "api/user/addgcmtoken";
     public static final String ENDPOINT_NOTIFICATION_LIST = "api/notification/list";
     public static final String ENDPOINT_VOTE_UP = "api/vote/up";
@@ -60,7 +61,9 @@ public class Api {
 
     public static String getImageUrl(Question question) {
         return ENDPOINT + "images/usericons/" + question.getUsername().toLowerCase() + ".png";
-
+    }
+    public static String getImageUrl(Comment comment) {
+        return ENDPOINT + "images/usericons/" + comment.getUsername().toLowerCase() + ".png";
     }
 
     private static ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
@@ -164,6 +167,14 @@ public class Api {
     public static String createUser() {
         Map<String, String> params = new HashMap<String, String>();
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_USER_CREATE, params, String.class);
+    }
+
+    public static Boolean addLocation(String userId,  double longitude, double latitude) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("longitude", longitude + "");
+        params.put("latitude", latitude  + "");
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_USER_ADD_LOCATION, params, Boolean.class);
     }
 
     public static String addGCMToken(String userId, String gcmToken) {

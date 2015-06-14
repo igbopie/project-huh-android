@@ -96,14 +96,11 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         more.setOnClickListener(this);
     }
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
         checkPlayServices();
     }
-
 
     private void initLocation() {
         MyLocationListener.getInstance((LocationManager) getSystemService(LOCATION_SERVICE));
