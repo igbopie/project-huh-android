@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -17,6 +18,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,7 +90,9 @@ public class QuestionDetailActivity extends ListActivity {
         textBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new PostComment(textBoxInput.getText().toString()).execute();
+                if (textBoxInput.getText().toString().trim().length() > 0) {
+                    new PostComment(textBoxInput.getText().toString()).execute();
+                }
             }
         });
 
@@ -127,8 +133,44 @@ public class QuestionDetailActivity extends ListActivity {
         new GetQuestionAndComments().execute();
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_question_detail, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i("CLICK", ""+item.getItemId());
+        if (item.getItemId() == R.id.questionDetailMoreOptions) {
+            ///
+            final PopupMenu popup = new PopupMenu(this, findViewById(R.id.questionDetailMoreOptions));
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.menu_question_detail_popup, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (item.getItemId() == R.id.questionDetailShareOptions) {
+                        startActivity(Intent.createChooser(getShareIntent(), "Share"));
+                    } else if (item.getItemId() == R.id.questionDetailFlagOptions) {
+                        Log.i("FLAG", "FLAG");
+                    }
+                    return false;
+                }
+            });
+            popup.show();
+            return true;
+        }
 
+        return super.onOptionsItemSelected(item);
+    }
+
+    private Intent getShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, question.getUrl());
+        return shareIntent;
+    }
 
     @Override
     protected void onListItemClick(ListView list, View view, int position, long id) {
@@ -220,7 +262,7 @@ public class QuestionDetailActivity extends ListActivity {
             adapter.notifyDataSetChanged();
 
             ActionBar mActionBar = getActionBar();
-            mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(question.getType().getColor())));
+            //mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(question.getType().getColor())));
             mActionBar.setDisplayShowTitleEnabled(false);
             mActionBar.setDisplayShowTitleEnabled(true);
             mActionBar.setTitle(question.getType().getWord());

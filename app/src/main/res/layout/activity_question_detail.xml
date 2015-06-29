@@ -42,11 +42,11 @@
             android:nextFocusUp="@id/textBoxInput" android:nextFocusLeft="@id/textBoxInput"
             />
 
-        <IconTextView
+        <TextView
             android:gravity="center"
             android:id="@+id/textBoxButton"
-            android:text="{fa-paper-plane-o}"
-            android:textSize="20dp"
+            android:text="Send"
+            android:textSize="16dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="5dp"

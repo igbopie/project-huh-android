@@ -55,7 +55,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/qText"
-            android:minHeight="25dp"
+            android:minHeight="27dp"
             android:layout_marginLeft="@dimen/questionLeftMargin"
             android:text="time is it?"
             android:gravity="center_vertical"
