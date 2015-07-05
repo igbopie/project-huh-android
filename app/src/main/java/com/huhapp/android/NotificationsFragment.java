@@ -16,7 +16,6 @@
 
 package com.huhapp.android;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -29,16 +28,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Notification;
-import com.huhapp.android.api.model.Question;
 import com.huhapp.android.util.DateUtil;
-import com.huhapp.android.util.PrefUtils;
 import com.huhapp.android.util.PropertyAccessor;
-import com.huhapp.android.util.QuestionTabsFragment;
 import com.huhapp.android.util.QuestionViewUtil;
 
 import java.util.ArrayList;
@@ -121,16 +118,15 @@ public class NotificationsFragment  extends ListFragment
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.notification_list_item_layout, parent, false);
             }
 
-
             TextView qText = (TextView) convertView.findViewById(R.id.qText);
             TextView createdTextView = (TextView) convertView.findViewById(R.id.createdText);
             TextView messageTextView = (TextView) convertView.findViewById(R.id.notificationText);
             TextView comment1View = (TextView) convertView.findViewById(R.id.comment1Text);
             TextView comment2View = (TextView) convertView.findViewById(R.id.comment2Text);
+            ImageView image = (ImageView) convertView.findViewById(R.id.notificationImage);
 
             comment1View.setVisibility(View.GONE);
             comment2View.setVisibility(View.GONE);
-
 
             qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimension(R.dimen.questionFontSize));
@@ -143,12 +139,15 @@ public class NotificationsFragment  extends ListFragment
                     getResources().getDimension(R.dimen.questionFontSize));
             comment2View.setTextColor(getResources().getColor(R.color.questionFontColor));
 
-
             String message = "";
             if (notification.getType().equals("OnQuestionPosted")){
                 message = "A new question was posted";
+                image.setImageResource(R.drawable.notification_question);
+
             } else if (notification.getType().equals("OnCommentOnMyQuestion")){
                 message = "Your question was commented";
+                image.setImageResource(R.drawable.notification_comment);
+
                 qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                         getResources().getDimension(R.dimen.questionSmallFontSize));
                 qText.setTextColor(getResources().getColor(R.color.notMainNotification));
@@ -160,6 +159,8 @@ public class NotificationsFragment  extends ListFragment
 
             } else if (notification.getType().equals("OnCommentOnMyComment")){
                 message = "Your comment was commented";
+                image.setImageResource(R.drawable.notification_comment);
+
                 qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                         getResources().getDimension(R.dimen.questionSmallFontSize));
                 qText.setTextColor(getResources().getColor(R.color.notMainNotification));
@@ -167,7 +168,6 @@ public class NotificationsFragment  extends ListFragment
                         getResources().getDimension(R.dimen.questionSmallFontSize));
                 comment1View.setTextColor(getResources().getColor(R.color.notMainNotification));
 
-                Log.i("Notification", R.dimen.questionSmallFontSize +"");
                 if (notification.getYourComment() != null) {
                     comment1View.setText("- " + notification.getYourComment().getText());
                     comment1View.setVisibility(View.VISIBLE);
@@ -180,20 +180,45 @@ public class NotificationsFragment  extends ListFragment
 
             } else if (notification.getType().equals("OnUpVoteOnMyQuestion")){
                 message = "Your question was up voted";
+                image.setImageResource(R.drawable.notification_up_vote);
+
             } else if (notification.getType().equals("OnDownVoteOnMyQuestion")){
                 message = "Your question was down voted";
+                image.setImageResource(R.drawable.notification_down_vote);
+
             } else if (notification.getType().equals("OnUpVoteOnMyComment")){
                 message = "Your comment was up voted";
+                image.setImageResource(R.drawable.notification_up_vote);
+
+                qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimension(R.dimen.questionSmallFontSize));
+                qText.setTextColor(getResources().getColor(R.color.notMainNotification));
+
+                if (notification.getComment() != null) {
+                    comment1View.setText("- " + notification.getComment().getText());
+                    comment1View.setVisibility(View.VISIBLE);
+                }
+
             } else if (notification.getType().equals("OnDownVoteOnMyComment")){
                 message = "Your comment was down voted";
+                image.setImageResource(R.drawable.notification_down_vote);
+
+                qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimension(R.dimen.questionSmallFontSize));
+                qText.setTextColor(getResources().getColor(R.color.notMainNotification));
+
+                if (notification.getComment() != null) {
+                    comment1View.setText("- " + notification.getComment().getText());
+                    comment1View.setVisibility(View.VISIBLE);
+                }
+
             } else {
                 message = "Unknown message";
             }
+
             messageTextView.setText(message);
             createdTextView.setText(DateUtil.getDateInMillis(notification.getCreated()));
             qText.setText(QuestionViewUtil.getSpannedFromQuestion(notification.getQuestion()));
-
-            Log.i("Notification", notification.toString());
 
             // Return the completed view to render on screen
             return convertView;

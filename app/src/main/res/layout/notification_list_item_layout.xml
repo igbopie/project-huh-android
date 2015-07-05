@@ -10,11 +10,10 @@
     >
 
     <ImageView
-        android:id="@+id/userImage"
+        android:id="@+id/notificationImage"
         android:layout_width="@dimen/questionImageSize"
         android:layout_height="@dimen/questionImageSize"
         android:padding="5dp"
-        android:background="@drawable/circle"
         android:layout_marginTop="@dimen/questionTopBottomMargin"
         android:layout_marginLeft="@dimen/questionLeftMargin"
         android:scaleType="fitCenter"
