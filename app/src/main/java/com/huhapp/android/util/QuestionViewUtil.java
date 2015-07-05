@@ -27,7 +27,7 @@ public class QuestionViewUtil {
     public static Integer VOTER_WIDTH = null;
 
     public static void fillView(View convertView, final Question question, final Context context, boolean showUser) {
-// Lookup view for data population
+        // Lookup view for data population
         TextView qText = (TextView) convertView.findViewById(R.id.qText);
         View qType = convertView.findViewById(R.id.qType);
         final TextView voteDownView = (TextView) convertView.findViewById(R.id.voteDown);
@@ -41,25 +41,16 @@ public class QuestionViewUtil {
         View questionContainer = convertView.findViewById(R.id.questionContainer);
         ImageView image = (ImageView) convertView.findViewById(R.id.userImage);
 
-        username.setText(question.getUsername()+" asks...");
+        username.setText(question.getUsername() + " asks...");
         Picasso.with(context)
                 .load(Api.getImageUrl(question))
-                //.resize(50, 50)
-                //.centerCrop()
+                        //.resize(50, 50)
+                        //.centerCrop()
                 .into(image);
 
         qText.setAutoLinkMask(Linkify.WEB_URLS);
         qText.setLinksClickable(showUser);
-
-
-        Spanned text = Html.fromHtml(
-                String.format("<font color=\"%s\">%s</font> %s?",
-                        question.getType().getColor(),
-                        question.getType().getWord(),
-                        question.getText()
-                )
-        );
-        qText.setText(text);
+        qText.setText(QuestionViewUtil.getSpannedFromQuestion(question));
         qType.setBackgroundColor(Color.parseColor(question.getType().getColor()));
         createdText.setText(DateUtil.getDateInMillis(question.getCreated()) + "");
         repliesText.setText(question.getnComments() + " replies");
@@ -103,7 +94,18 @@ public class QuestionViewUtil {
 
     }
 
-    private static void setVoter(Question question,TextView voteMeter,TextView voteUpView,TextView voteDownView, View voter) {
+    public static Spanned getSpannedFromQuestion(Question question) {
+        Spanned text = Html.fromHtml(
+                String.format("<font color=\"%s\">%s</font> %s?",
+                        question.getType().getColor(),
+                        question.getType().getWord(),
+                        question.getText()
+                )
+        );
+        return text;
+    }
+
+    private static void setVoter(Question question, TextView voteMeter, TextView voteUpView, TextView voteDownView, View voter) {
 
         if (VOTER_WIDTH == null) {
             voteMeter.setText("9999");
@@ -114,7 +116,7 @@ public class QuestionViewUtil {
         voteMeter.setText(question.getVoteScore() + "");
 
 
-        if (question.getMyVote() > 0){
+        if (question.getMyVote() > 0) {
             voteMeter.setTextColor(Color.parseColor(question.getType().getColor()));
             voteDownView.setTextColor(Color.parseColor("#BBBBBB"));
             voteUpView.setTextColor(Color.parseColor(question.getType().getColor()));
@@ -129,10 +131,11 @@ public class QuestionViewUtil {
         }
     }
 
-    private static class VoteUp extends AsyncTask<Void,Void,Question> {
+    private static class VoteUp extends AsyncTask<Void, Void, Question> {
         private String questionId;
         private OnTaskCompleted<Question> listener;
         private Context context;
+
         private VoteUp(String questionId, Context context, OnTaskCompleted listener) {
             this.questionId = questionId;
             this.listener = listener;
@@ -156,10 +159,11 @@ public class QuestionViewUtil {
         }
     }
 
-    private static class VoteDown extends AsyncTask<Void,Void,Question> {
+    private static class VoteDown extends AsyncTask<Void, Void, Question> {
         private String questionId;
         private OnTaskCompleted<Question> listener;
         private Context context;
+
         private VoteDown(String questionId, Context context, OnTaskCompleted listener) {
             this.questionId = questionId;
             this.listener = listener;

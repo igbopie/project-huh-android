@@ -1,36 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical">
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/message"
-        android:text="Text"
-        android:gravity="left"
-        android:textSize="14sp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/questionContainer"
+    >
+
+    <ImageView
+        android:id="@+id/userImage"
+        android:layout_width="@dimen/questionImageSize"
+        android:layout_height="@dimen/questionImageSize"
+        android:padding="5dp"
+        android:background="@drawable/circle"
+        android:layout_marginTop="@dimen/questionTopBottomMargin"
+        android:layout_marginLeft="@dimen/questionLeftMargin"
+        android:scaleType="fitCenter"
         />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/message"
-        android:id="@+id/created"
-        android:text="1d"
-        android:gravity="left"
-        android:textSize="12sp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textColor="#bbbbbb"
-        />
 
-</RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/middlePartContainer"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/questionTopBottomMargin"
+        >
+        <TextView
+            android:id="@+id/notificationText"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/questionImageSize"
+            android:layout_marginLeft="@dimen/questionLeftMargin"
+            android:layout_marginStart="@dimen/questionLeftMargin"
+            android:textSize="@dimen/questionSmallFontSize"
+            android:textColor="@color/questionSmallFontColor"
+            android:text="Your comment was down voted"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/qText"
+            android:minHeight="27dp"
+            android:layout_marginLeft="@dimen/questionLeftMargin"
+            android:text="WHAT time is it?"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/comment1Text"
+            android:layout_marginLeft="@dimen/commentNotificationLeftMargin"
+            android:text="it is noon"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/comment2Text"
+            android:layout_marginLeft="@dimen/commentNotificationLeftMargin"
+            android:text="it is late"
+            android:gravity="center_vertical"
+            />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/questionSmallFontSize"
+            android:textColor="@color/questionSmallFontColor"
+            android:gravity="bottom"
+            android:id="@+id/createdText"
+            android:text="1d"
+            android:layout_marginLeft="@dimen/questionLeftMargin"
+            android:layout_marginStart="@dimen/questionLeftMargin"
+            android:layout_marginBottom="@dimen/questionTopBottomMargin"
+            android:layout_marginTop="@dimen/questionMetaTopMargin"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -17,8 +17,12 @@ public class Notification implements Serializable {
     private String message;
     private String questionId;
     private String commentId;
+    private String yourCommentId;
     private boolean read;
     private Date created;
+    private Comment comment;
+    private Comment yourComment;
+    private Question question;
 
     public String getType() {
         return type;
@@ -68,6 +72,38 @@ public class Notification implements Serializable {
         this.created = created;
     }
 
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public String getYourCommentId() {
+        return yourCommentId;
+    }
+
+    public void setYourCommentId(String yourCommentId) {
+        this.yourCommentId = yourCommentId;
+    }
+
+    public Comment getYourComment() {
+        return yourComment;
+    }
+
+    public void setYourComment(Comment yourComment) {
+        this.yourComment = yourComment;
+    }
+
     @Override
     public String toString() {
         return "Notification{" +
@@ -75,8 +111,12 @@ public class Notification implements Serializable {
                 ", message='" + message + '\'' +
                 ", questionId='" + questionId + '\'' +
                 ", commentId='" + commentId + '\'' +
+                ", yourCommentId='" + yourCommentId + '\'' +
                 ", read=" + read +
                 ", created=" + created +
+                ", comment=" + comment +
+                ", yourComment=" + yourComment +
+                ", question=" + question +
                 '}';
     }
 }
