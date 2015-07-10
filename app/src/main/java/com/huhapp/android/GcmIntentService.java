@@ -17,6 +17,8 @@ public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private  static int UNIQUE_INT_PER_CALL = 1;
     public static final String TAG = "GcmIntentService";
+    public static String NOTIFICATION_RECEIVED = "com.unitedcoders.android.broadcasttest.SHOWTOAST";
+
 
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
@@ -92,6 +94,11 @@ public class GcmIntentService extends IntentService {
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(UNIQUE_INT_PER_CALL, mBuilder.build());
+
+        Intent broadcast = new Intent();
+        broadcast.setAction(NOTIFICATION_RECEIVED);
+        sendBroadcast(broadcast);
+
     }
 
     // Put the message into a notification and post it.
@@ -111,6 +118,10 @@ public class GcmIntentService extends IntentService {
                         .setContentText(msg);
 
         mNotificationManager.notify(UNIQUE_INT_PER_CALL, mBuilder.build());
+
+        Intent broadcast = new Intent();
+        broadcast.setAction(NOTIFICATION_RECEIVED);
+        sendBroadcast(broadcast);
     }
 
     //TODO GROUP

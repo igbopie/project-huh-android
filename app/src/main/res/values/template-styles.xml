@@ -25,12 +25,14 @@
     <color name="questionSmallFontColor">#c3c3c3</color>
     <color name="notMainNotification"  >#999999</color>
     <color name="questionFontColor"  >#000000</color>
+    <color name="notificationUnreadBackground"  >#f7f3ff</color>
+
 
     <!-- Dimen -->
     <dimen name="questionTopBottomMargin">10dp</dimen>
     <dimen name="questionMetaTopMargin">7dp</dimen>
     <dimen name="questionLeftMargin">10dp</dimen>
-    <dimen name="commentNotificationLeftMargin">20dp</dimen>
+    <dimen name="commentNotificationLeftMargin">30dp</dimen>
     <dimen name="questionImageSize">30dp</dimen>
     <dimen name="questionSmallFontSize">12sp</dimen>
     <dimen name="questionFontSize">14sp</dimen>

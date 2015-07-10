@@ -17,9 +17,11 @@
 package com.huhapp.android;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -38,12 +40,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.games.Notifications;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.huhapp.android.api.Api;
+import com.huhapp.android.api.model.Notification;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.activities.SampleActivityBase;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.util.MyLocationListener;
+import com.huhapp.android.util.NotificationUpdateListener;
 import com.huhapp.android.util.PrefUtils;
 import com.huhapp.android.util.PropertyAccessor;
 import com.joanzapata.android.iconify.IconDrawable;
@@ -61,7 +66,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * For devices with displays with a width of 720dp or greater, the sample log is always visible,
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
-public class MainActivity extends SampleActivityBase implements ImageButton.OnClickListener {
+public class MainActivity extends SampleActivityBase implements ImageButton.OnClickListener, NotificationUpdateListener {
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -94,11 +100,17 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         notifications.setOnClickListener(this);
         ImageButton more = (ImageButton) findViewById(R.id.more);
         more.setOnClickListener(this);
+
+        findViewById(R.id.notificationBadge).setVisibility(View.INVISIBLE);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(GcmIntentService.NOTIFICATION_RECEIVED);
+        registerReceiver(receiver, filter);
         checkPlayServices();
     }
 
@@ -195,6 +207,7 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
 
 
 
+
     private class SignUp extends AsyncTask<Void,Void,String> {
 
         private SignUp() {
@@ -222,6 +235,7 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
                 PropertyAccessor.setUserId(userId);
                 MainActivity.this.setSearchTabActive();
                 initNotification();
+                new UpdateNotificationNumberFromServer().execute();
                 //Toast toast = Toast.makeText(MainActivity.this, "Signed up", Toast.LENGTH_SHORT);
                 //toast.show();
             } else {
@@ -348,4 +362,54 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         }
     }
 
+
+    private class UpdateNotificationNumberFromServer extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            int numberUnread = 0;
+
+            List<Notification> notifications = Api.notificationList(PropertyAccessor.getUserId());
+
+            for(Notification notification: notifications) {
+                if (!notification.isRead()) {
+                    numberUnread ++;
+                }
+            }
+
+            return numberUnread;
+        }
+
+        @Override
+        protected void onPostExecute(Integer numberUnread) {
+            TextView textView = (TextView) findViewById(R.id.notificationBadge);
+            if (numberUnread > 0) {
+                textView.setText(numberUnread + "");
+                textView.setVisibility(View.VISIBLE);
+            } else {
+                textView.setVisibility(View.INVISIBLE);
+            }
+
+            super.onPostExecute(numberUnread);
+        }
+    }
+
+
+    @Override
+    public void notificationUpdated() {
+        new UpdateNotificationNumberFromServer().execute();
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            notificationUpdated();
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(receiver);
+        super.onPause();
+    }
 }

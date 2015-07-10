@@ -16,10 +16,13 @@
 
 package com.huhapp.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -35,16 +38,22 @@ import android.widget.TextView;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Notification;
 import com.huhapp.android.util.DateUtil;
+import com.huhapp.android.util.NotificationUpdateListener;
 import com.huhapp.android.util.PropertyAccessor;
 import com.huhapp.android.util.QuestionViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class NotificationsFragment  extends ListFragment
 {
     NotificationAdapter adapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    Timer readTimer;
+    boolean detached = false;
+    NotificationUpdateListener notificationListener;
 
     public static NotificationsFragment newInstance()
     {
@@ -122,11 +131,9 @@ public class NotificationsFragment  extends ListFragment
             TextView createdTextView = (TextView) convertView.findViewById(R.id.createdText);
             TextView messageTextView = (TextView) convertView.findViewById(R.id.notificationText);
             TextView comment1View = (TextView) convertView.findViewById(R.id.comment1Text);
-            TextView comment2View = (TextView) convertView.findViewById(R.id.comment2Text);
             ImageView image = (ImageView) convertView.findViewById(R.id.notificationImage);
 
             comment1View.setVisibility(View.GONE);
-            comment2View.setVisibility(View.GONE);
 
             qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimension(R.dimen.questionFontSize));
@@ -135,9 +142,13 @@ public class NotificationsFragment  extends ListFragment
                     getResources().getDimension(R.dimen.questionFontSize));
             comment1View.setTextColor(getResources().getColor(R.color.questionFontColor));
 
-            comment2View.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.questionFontSize));
-            comment2View.setTextColor(getResources().getColor(R.color.questionFontColor));
+            if (notification.isRead()){
+                messageTextView.setTextColor(getResources().getColor(R.color.questionSmallFontColor));
+                convertView.setBackgroundColor(Color.WHITE);
+            } else {
+                messageTextView.setTextColor(getResources().getColor(R.color.buttonTabMainColor));
+                convertView.setBackgroundColor(getResources().getColor(R.color.notificationUnreadBackground));
+            }
 
             String message = "";
             if (notification.getType().equals("OnQuestionPosted")){
@@ -153,7 +164,7 @@ public class NotificationsFragment  extends ListFragment
                 qText.setTextColor(getResources().getColor(R.color.notMainNotification));
 
                 if (notification.getComment() != null) {
-                    comment1View.setText("- " + notification.getComment().getText());
+                    comment1View.setText(notification.getComment().getText());
                     comment1View.setVisibility(View.VISIBLE);
                 }
 
@@ -164,18 +175,10 @@ public class NotificationsFragment  extends ListFragment
                 qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                         getResources().getDimension(R.dimen.questionSmallFontSize));
                 qText.setTextColor(getResources().getColor(R.color.notMainNotification));
-                comment1View.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                        getResources().getDimension(R.dimen.questionSmallFontSize));
-                comment1View.setTextColor(getResources().getColor(R.color.notMainNotification));
-
-                if (notification.getYourComment() != null) {
-                    comment1View.setText("- " + notification.getYourComment().getText());
-                    comment1View.setVisibility(View.VISIBLE);
-                }
 
                 if (notification.getComment() != null) {
-                    comment2View.setText("- " + notification.getComment().getText());
-                    comment2View.setVisibility(View.VISIBLE);
+                    comment1View.setText(notification.getComment().getText());
+                    comment1View.setVisibility(View.VISIBLE);
                 }
 
             } else if (notification.getType().equals("OnUpVoteOnMyQuestion")){
@@ -195,7 +198,7 @@ public class NotificationsFragment  extends ListFragment
                 qText.setTextColor(getResources().getColor(R.color.notMainNotification));
 
                 if (notification.getComment() != null) {
-                    comment1View.setText("- " + notification.getComment().getText());
+                    comment1View.setText(notification.getComment().getText());
                     comment1View.setVisibility(View.VISIBLE);
                 }
 
@@ -254,9 +257,59 @@ public class NotificationsFragment  extends ListFragment
                 adapter.clear();
                 adapter.addAll(result);
                 adapter.notifyDataSetChanged();
+
+                if (readTimer == null && !detached) {
+                    readTimer = new Timer();
+                    readTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (!detached) {
+                                readTimer = null;
+                                new MarkAllAsRead().execute();
+                            }
+                        }
+                    }, 3000);
+                }
             }
-            //swipeLayout.setRefreshing(false);*/
         }
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            notificationListener = (NotificationUpdateListener) activity;
+        } catch (ClassCastException e) {
+            // no problemo
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        notificationListener = null;
+        detached = true;
+        if (readTimer != null) {
+            readTimer.cancel();
+            readTimer = null;
+        }
+    }
+
+    private class MarkAllAsRead extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            return Api.notificationMarkAllAsRead(PropertyAccessor.getUserId());
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            if (notificationListener != null) {
+                notificationListener.notificationUpdated();
+            }
+
+        }
+    }
 }

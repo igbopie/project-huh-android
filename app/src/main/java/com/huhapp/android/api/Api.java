@@ -38,6 +38,7 @@ public class Api {
     public static final String ENDPOINT_USER_ADD_LOCATION = "api/user/location";
     public static final String ENDPOINT_USER_ADD_GCM_TOKEN = "api/user/addgcmtoken";
     public static final String ENDPOINT_NOTIFICATION_LIST = "api/notification/list";
+    public static final String ENDPOINT_NOTIFICATION_MARK_ALL_AS_READ = "api/notification/markallasread";
     public static final String ENDPOINT_VOTE_UP = "api/vote/up";
     public static final String ENDPOINT_QUESTION_TYPE_LIST = "api/questiontype/list";
     public static final String ENDPOINT_VOTE_DOWN = "api/vote/down";
@@ -245,6 +246,11 @@ public class Api {
         Map<String, String> params = new HashMap<String, String>();
         params.put("userId", userId);
         return Api.makeRequestParsedForList(ENDPOINT + ENDPOINT_NOTIFICATION_LIST, params, Notification.class);
+    }
+    public static Boolean notificationMarkAllAsRead(String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_NOTIFICATION_MARK_ALL_AS_READ, params, Boolean.class);
     }
 
     public static List<QuestionType> questionTypeList() {

@@ -49,11 +49,36 @@
             style="@style/BottomTabBarItemStyle"
             android:background="@color/buttonTabMainColor"/>
 
-        <ImageButton
+        <RelativeLayout
+            style="@style/BottomTabBarItemStyle">
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/notifications"
+                android:src="@drawable/notification"
+                style="@style/BottomTabBarItemStyle"
+                />
 
-            android:id="@+id/notifications"
-            android:src="@drawable/notification"
-            style="@style/BottomTabBarItemStyle"/>
+            <TextView
+                android:id="@+id/notificationBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="10sp"
+                android:textColor="#ffffff"
+                android:background="@drawable/notification_circle"
+                android:layout_marginRight="13dp"
+                android:layout_marginTop="1dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_alignParentRight="true"
+
+                />
+
+        </RelativeLayout>
+
 
         <ImageButton
             android:id="@+id/more"

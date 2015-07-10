@@ -56,14 +56,6 @@
             android:text="it is noon"
             android:gravity="center_vertical"
             />
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/comment2Text"
-            android:layout_marginLeft="@dimen/commentNotificationLeftMargin"
-            android:text="it is late"
-            android:gravity="center_vertical"
-            />
 
         <TextView
             android:layout_height="wrap_content"
