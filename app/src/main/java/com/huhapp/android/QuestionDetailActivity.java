@@ -2,19 +2,14 @@ package com.huhapp.android;
 
 import android.app.ActionBar;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,16 +22,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.util.CommentViewUtil;
-import com.huhapp.android.util.PrefUtils;
 import com.huhapp.android.util.PropertyAccessor;
 import com.huhapp.android.util.QuestionViewUtil;
 

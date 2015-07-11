@@ -19,40 +19,29 @@ package com.huhapp.android;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.games.Notifications;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Notification;
-import com.huhapp.android.api.model.Question;
 import com.huhapp.android.common.activities.SampleActivityBase;
 import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.util.MyLocationListener;
 import com.huhapp.android.util.NotificationUpdateListener;
-import com.huhapp.android.util.PrefUtils;
 import com.huhapp.android.util.PropertyAccessor;
-import com.joanzapata.android.iconify.IconDrawable;
-import com.joanzapata.android.iconify.Iconify;
 
 import java.io.IOException;
 import java.util.List;
@@ -67,7 +56,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
 public class MainActivity extends SampleActivityBase implements ImageButton.OnClickListener, NotificationUpdateListener {
-
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -164,7 +152,6 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         }
     }
 
-
     private void setSearchTabActive() {
         this.setFragment(new SearchFragment());
     }
@@ -176,6 +163,7 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
     private void setNotificationTabActive() {
         this.setFragment(new NotificationsFragment());
     }
+
     private void setSettingsTabActive() {
         this.setFragment(new SettingsFragment());
     }
@@ -184,7 +172,6 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         Intent intent = new Intent(this, CreateQuestionActivity.class);
         startActivityForResult(intent, CREATE_QUESTION_CODE);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -208,9 +195,6 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
 
         currentFragment = fragment;
     }
-
-
-
 
     private class SignUp extends AsyncTask<Void,Void,String> {
 

@@ -17,36 +17,24 @@
 package com.huhapp.android.util;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.huhapp.android.MainActivity;
 import com.huhapp.android.QuestionDetailActivity;
 import com.huhapp.android.R;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Question;
-import com.huhapp.android.common.logger.Log;
-import com.huhapp.android.common.view.SlidingTabLayout;
-import com.huhapp.android.customview.VoteDownView;
-import com.huhapp.android.customview.VoteUpView;
 
 import java.util.ArrayList;
 import java.util.List;

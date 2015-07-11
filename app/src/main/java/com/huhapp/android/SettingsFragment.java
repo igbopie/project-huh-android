@@ -17,6 +17,7 @@
 package com.huhapp.android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -79,6 +80,7 @@ public class SettingsFragment extends ListFragment {
         switch (tag.intValue()) {
             case NOTIFICATIONS:
                 Log.i("MORE", "NOTIFICATIONS");
+                startActivity(new Intent(getActivity(), NotificationSettingsActivity.class));
                 break;
             case TERMS_OF_USE:
                 Log.i("MORE", "TERMS_OF_USE");

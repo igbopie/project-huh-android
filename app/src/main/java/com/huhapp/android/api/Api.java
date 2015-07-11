@@ -1,30 +1,22 @@
 package com.huhapp.android.api;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Notification;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.api.model.QuestionType;
+import com.huhapp.android.api.model.Setting;
 import com.huhapp.android.common.logger.Log;
-import com.huhapp.android.util.JsonDateDeserializer;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URLEncoder;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +29,8 @@ public class Api {
     public static final String ENDPOINT_USER_CREATE = "api/user/create";
     public static final String ENDPOINT_USER_ADD_LOCATION = "api/user/location";
     public static final String ENDPOINT_USER_ADD_GCM_TOKEN = "api/user/addgcmtoken";
+    public static final String ENDPOINT_SETTING_LIST = "api/setting/list";
+    public static final String ENDPOINT_SETTING_UPDATE = "api/setting/update";
     public static final String ENDPOINT_NOTIFICATION_LIST = "api/notification/list";
     public static final String ENDPOINT_NOTIFICATION_MARK_ALL_AS_READ = "api/notification/markallasread";
     public static final String ENDPOINT_VOTE_UP = "api/vote/up";
@@ -256,6 +250,19 @@ public class Api {
     public static List<QuestionType> questionTypeList() {
         Map<String, String> params = new HashMap<String, String>();
         return Api.makeRequestParsedForList(ENDPOINT + ENDPOINT_QUESTION_TYPE_LIST, params, QuestionType.class);
+    }
+
+    public static List<Setting> settingList(String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        return Api.makeRequestParsedForList(ENDPOINT + ENDPOINT_SETTING_LIST, params, Setting.class);
+    }
+    public static Boolean updateSetting(String name, Boolean value, String userId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("name", name);
+        params.put("value", value.toString());
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_SETTING_UPDATE, params, Boolean.class);
     }
 
     public static Question questionCreate(String questionType, String text, String userId, double longitude, double latitude) {

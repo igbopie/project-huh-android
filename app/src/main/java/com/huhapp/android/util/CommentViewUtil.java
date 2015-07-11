@@ -3,8 +3,6 @@ package com.huhapp.android.util;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.util.Linkify;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,8 +12,6 @@ import com.huhapp.android.R;
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Question;
-import com.huhapp.android.customview.VoteDownView;
-import com.huhapp.android.customview.VoteUpView;
 import com.squareup.picasso.Picasso;
 
 /**

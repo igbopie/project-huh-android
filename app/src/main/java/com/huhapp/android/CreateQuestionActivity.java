@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,13 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.huhapp.android.api.Api;
-import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.api.model.QuestionType;
-import com.huhapp.android.util.CommentViewUtil;
-import com.huhapp.android.util.PrefUtils;
 import com.huhapp.android.util.PropertyAccessor;
-import com.huhapp.android.util.QuestionViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -63,6 +63,11 @@
             android:label="@string/title_activity_create_question" >
         </activity>
 
+        <activity
+            android:name=".NotificationSettingsActivity"
+            android:label="@string/title_activity_notification_settings" >
+        </activity>
+
         <receiver
             android:name=".GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
