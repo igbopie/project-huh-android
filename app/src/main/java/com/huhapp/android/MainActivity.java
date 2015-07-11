@@ -159,6 +159,7 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
                 return;
             case R.id.more:
                 //item.setIcon(faEllipsisHActive);
+                this.setSettingsTabActive();
                 return;
         }
     }
@@ -174,6 +175,9 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
 
     private void setNotificationTabActive() {
         this.setFragment(new NotificationsFragment());
+    }
+    private void setSettingsTabActive() {
+        this.setFragment(new SettingsFragment());
     }
 
     private void createQuestion() {
