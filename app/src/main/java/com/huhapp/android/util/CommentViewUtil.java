@@ -129,7 +129,7 @@ public class CommentViewUtil {
 
         @Override
         protected Comment doInBackground(Void... voids) {
-            return Api.commentVoteUp(commentId, PropertyAccessor.getUserId());
+            return Api.commentVoteUp(commentId);
         }
 
         @Override
@@ -156,7 +156,7 @@ public class CommentViewUtil {
 
         @Override
         protected Comment doInBackground(Void... voids) {
-            return Api.commentVoteDown(questionId, PropertyAccessor.getUserId());
+            return Api.commentVoteDown(questionId);
         }
 
         @Override

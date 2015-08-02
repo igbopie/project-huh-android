@@ -86,7 +86,7 @@ public class NotificationSettingsActivity extends ListActivity {
 
         @Override
         protected List<Setting> doInBackground(Void... voids) {
-            return Api.settingList(PropertyAccessor.getUserId());
+            return Api.settingList();
         }
 
         @Override
@@ -109,7 +109,7 @@ public class NotificationSettingsActivity extends ListActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return Api.updateSetting(setting.getName(), setting.getValue(), PropertyAccessor.getUserId());
+            return Api.updateSetting(setting.getName(), setting.getValue());
         }
     }
 }

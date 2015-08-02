@@ -196,7 +196,7 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         currentFragment = fragment;
     }
 
-    private class SignUp extends AsyncTask<Void,Void,String> {
+    private class SignUp extends AsyncTask<Void,Void,Void> {
 
         private SignUp() {
         }
@@ -207,20 +207,16 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
-            String userId = PropertyAccessor.getUserId();
-            if (userId == null || userId.length() == 0) {
-                return Api.createUser();
-            } else {
-                return userId;
-            }
+        protected Void doInBackground(Void... voids) {
+            //this will create a user
+            Api.testToken();
+            return null;
         }
 
         @Override
-        protected void onPostExecute(String userId) {
-            super.onPostExecute(userId);
-            if (userId != null && userId.length() > 0) {
-                PropertyAccessor.setUserId(userId);
+        protected void onPostExecute(Void v) {
+            super.onPostExecute(v);
+            if (PropertyAccessor.getUsername() != null && PropertyAccessor.getUsername().length() > 0) {
                 MainActivity.this.setSearchTabActive();
                 initNotification();
                 new UpdateNotificationNumberFromServer().execute();
@@ -344,7 +340,7 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
 
         @Override
         protected Void doInBackground(Void... params) {
-            Api.addGCMToken(PropertyAccessor.getUserId(), token);
+            Api.addGCMToken(token);
             Log.i(TAG, "GCM Registered Backend " + token);
             return null;
         }
@@ -357,7 +353,7 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         protected Integer doInBackground(Void... params) {
             int numberUnread = 0;
 
-            List<Notification> notifications = Api.notificationList(PropertyAccessor.getUserId());
+            List<Notification> notifications = Api.notificationList();
 
             for(Notification notification: notifications) {
                 if (!notification.isRead()) {

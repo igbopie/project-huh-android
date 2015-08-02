@@ -240,7 +240,7 @@ public class NotificationsFragment  extends ListFragment
 
         @Override
         protected List<Notification> doInBackground(Void... voids) {
-            return Api.notificationList(PropertyAccessor.getUserId());
+            return Api.notificationList();
         }
 
         @Override
@@ -297,7 +297,7 @@ public class NotificationsFragment  extends ListFragment
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            return Api.notificationMarkAllAsRead(PropertyAccessor.getUserId());
+            return Api.notificationMarkAllAsRead();
         }
 
         @Override

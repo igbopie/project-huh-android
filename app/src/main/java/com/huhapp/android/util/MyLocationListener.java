@@ -70,7 +70,7 @@ public class MyLocationListener implements LocationListener {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Api.addLocation(PropertyAccessor.getUserId(), longitude, latitude);
+            Api.addLocation(longitude, latitude);
             return null;
         }
     }

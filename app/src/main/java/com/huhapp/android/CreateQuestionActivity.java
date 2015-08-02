@@ -240,7 +240,6 @@ public class CreateQuestionActivity extends ListActivity {
         protected Question doInBackground(Void... voids) {
             return Api.questionCreate(this.questionType.getWord(),
                     this.text,
-                    PropertyAccessor.getUserId(),
                     PropertyAccessor.getUserLongitude(),
                     PropertyAccessor.getUserLatitude());
         }

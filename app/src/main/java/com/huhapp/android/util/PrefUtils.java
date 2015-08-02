@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class PrefUtils {
-    public static final String PREFS_USER_ID = "__USER_ID__" ;
+    public static final String PREFS_USERNAME = "__USERNAME__" ;
+    public static final String PREFS_PASSWORD = "__PASSWORD__" ;
+    public static final String PREFS_TOKEN = "__TOKEN__" ;
     public static final String PREFS_LAST_LONG = "__LAST_LONG__" ;
     public static final String PREFS_LAST_LAT = "__LAST_LAT__" ;
     public static final String PREFS_REG_ID = "__REG_ID__";

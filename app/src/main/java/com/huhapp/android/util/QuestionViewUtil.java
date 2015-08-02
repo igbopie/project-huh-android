@@ -144,7 +144,7 @@ public class QuestionViewUtil {
 
         @Override
         protected Question doInBackground(Void... voids) {
-            return Api.questionVoteUp(questionId, PropertyAccessor.getUserId());
+            return Api.questionVoteUp(questionId);
         }
 
         @Override
@@ -172,7 +172,7 @@ public class QuestionViewUtil {
 
         @Override
         protected Question doInBackground(Void... voids) {
-            return Api.questionVoteDown(questionId, PropertyAccessor.getUserId());
+            return Api.questionVoteDown(questionId);
         }
 
         @Override

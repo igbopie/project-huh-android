@@ -17,12 +17,28 @@ public class PropertyAccessor {
         _context = context;
     }
 
-    public static String getUserId() {
-        return PrefUtils.getFromPrefs(_context, PrefUtils.PREFS_USER_ID, "");
+    public static String getUsername() {
+        return PrefUtils.getFromPrefs(_context, PrefUtils.PREFS_USERNAME, "");
     }
 
-    public static void setUserId(String userId) {
-        PrefUtils.saveToPrefs(_context, PrefUtils.PREFS_USER_ID, userId);
+    public static void setUsername(String username) {
+        PrefUtils.saveToPrefs(_context, PrefUtils.PREFS_USERNAME, username);
+    }
+
+    public static String getPassword() {
+        return PrefUtils.getFromPrefs(_context, PrefUtils.PREFS_PASSWORD, "");
+    }
+
+    public static void setPassword(String password) {
+        PrefUtils.saveToPrefs(_context, PrefUtils.PREFS_PASSWORD, password);
+    }
+
+    public static String getToken() {
+        return PrefUtils.getFromPrefs(_context, PrefUtils.PREFS_TOKEN, "");
+    }
+
+    public static void setToken(String token) {
+        PrefUtils.saveToPrefs(_context, PrefUtils.PREFS_TOKEN, token);
     }
 
     public static double getUserLongitude() {

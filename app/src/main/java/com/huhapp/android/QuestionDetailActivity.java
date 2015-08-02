@@ -234,8 +234,8 @@ public class QuestionDetailActivity extends ListActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            question = Api.getQuestion(questionId, PropertyAccessor.getUserId());
-            comments = Api.getComments(questionId, PropertyAccessor.getUserId());
+            question = Api.getQuestion(questionId);
+            comments = Api.getComments(questionId);
             return null;
         }
 
@@ -278,7 +278,7 @@ public class QuestionDetailActivity extends ListActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Api.createComment(text, PropertyAccessor.getUserId(), questionId);
+            Api.createComment(text, questionId);
             return null;
         }
 
