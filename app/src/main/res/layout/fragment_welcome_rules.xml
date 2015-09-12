@@ -1,0 +1,30 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.huhapp.android.welcome.WelcomeToHuhFragment"
+    android:background="@color/pinkhuh"
+    >
+
+    <LinearLayout style="@style/WelcomeLayout">
+        <TextView
+            style="@style/WelcomeTitle"
+            android:text="@string/welcome_title_4" />
+
+        <LinearLayout style="@style/WelcomeCicleContainer">
+            <ImageView style="@style/WelcomeCicle"/>
+            <ImageView style="@style/WelcomeCicle"/>
+            <ImageView style="@style/WelcomeCicle"/>
+            <ImageView style="@style/WelcomeCicleActive"/>
+            <ImageView style="@style/WelcomeCicle"/>
+        </LinearLayout>
+
+        <TextView
+            style="@style/WelcomeDescription"
+            android:text="@string/welcome_description_4" />
+
+        <ImageView
+            style="@style/WelcomeImage"
+            android:src="@drawable/rules_icon" />
+    </LinearLayout>
+
+</FrameLayout>

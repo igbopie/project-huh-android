@@ -26,6 +26,13 @@
     <color name="notMainNotification"  >#999999</color>
     <color name="questionFontColor"  >#000000</color>
     <color name="notificationUnreadBackground"  >#f7f3ff</color>
+    <color name="redhuh">#e03a5d</color>
+    <color name="bluehuh">#52acbe</color>
+    <color name="greenhuh">#85e39d</color>
+    <color name="pinkhuh">#f08596</color>
+    <color name="yellowhuh">#ffcf1a</color>
+
+
 
 
     <!-- Dimen -->
@@ -91,5 +98,65 @@
         <item name="android:shadowDy">-3.5</item>
         <item name="android:shadowRadius">2</item>
     </style>
+
+    <style name="NoActionBar" parent="@android:style/Theme.Holo.Light">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="WelcomeLayout">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="WelcomeImage">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">140dp</item>
+        <item name="android:layout_marginTop">30dp</item>
+    </style>
+
+    <style name="WelcomeTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="WelcomeDescription">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:layout_marginTop">40dp</item>
+    </style>
+
+    <style name="WelcomeCicle">
+        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:alpha">.5</item>
+        <item name="android:layout_marginLeft">3dp</item>
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:src">@drawable/circle</item>
+    </style>
+
+    <style name="WelcomeCicleActive" parent="WelcomeCicle">
+        <item name="android:alpha">1</item>
+    </style>
+
+    <style name="WelcomeCicleContainer">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
+
+
+
+
 
 </resources>

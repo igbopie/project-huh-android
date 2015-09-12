@@ -42,6 +42,7 @@ import com.huhapp.android.common.logger.Log;
 import com.huhapp.android.util.MyLocationListener;
 import com.huhapp.android.util.NotificationUpdateListener;
 import com.huhapp.android.util.PropertyAccessor;
+import com.huhapp.android.welcome.WelcomeActivity;
 
 import java.io.IOException;
 import java.util.List;
@@ -65,6 +66,8 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
     public static final String TAG = "MainActivity";
 
     private Fragment currentFragment;
+    private boolean firstTime = false;
+    private boolean noFragment = true;
 
     public static final int CREATE_QUESTION_CODE = 1816;
 
@@ -73,6 +76,12 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // First time
+        if (PropertyAccessor.getUsername() == null || PropertyAccessor.getUsername().trim().length() == 0) {
+            Log.i("INIT", "FIRST TIME");
+            startActivity(new Intent(this, WelcomeActivity.class));
+            firstTime = true;
+        }
 
         this.initLocation();
         new SignUp().execute();
@@ -100,6 +109,10 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         filter.addAction(GcmIntentService.NOTIFICATION_RECEIVED);
         registerReceiver(receiver, filter);
         checkPlayServices();
+
+        if (this.noFragment) {
+            this.setSearchTabActive();
+        }
     }
 
     private void initLocation() {
@@ -189,6 +202,8 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
     }
 
     private void setFragment(Fragment fragment) {
+        noFragment = false;
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.sample_content_fragment, fragment);
         transaction.commit();
@@ -217,7 +232,9 @@ public class MainActivity extends SampleActivityBase implements ImageButton.OnCl
         protected void onPostExecute(Void v) {
             super.onPostExecute(v);
             if (PropertyAccessor.getUsername() != null && PropertyAccessor.getUsername().length() > 0) {
-                MainActivity.this.setSearchTabActive();
+                if (!firstTime) {
+                    MainActivity.this.setSearchTabActive();
+                }
                 initNotification();
                 new UpdateNotificationNumberFromServer().execute();
                 //Toast toast = Toast.makeText(MainActivity.this, "Signed up", Toast.LENGTH_SHORT);

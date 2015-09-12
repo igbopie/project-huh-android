@@ -5,5 +5,26 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_create_question">Post Question</string>
     <string name="title_activity_notification_settings">Notification Settings</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+
+    <string name="welcome_title_1">Welcome to Huh?</string>
+    <string name="welcome_title_2">Enable Location</string>
+    <string name="welcome_title_3">Notifications</string>
+    <string name="welcome_title_4">Rules</string>
+    <string name="welcome_title_5">Thanks</string>
+
+
+    <string name="welcome_description_1">Instantly ask or answer questions with folks around you. It\'s anonymous, so don\'t be shy.</string>
+    <string name="welcome_description_2">To find questions and answers nearby, please enable access to your location.</string>
+    <string name="welcome_description_3">To be notified of new questions and answers, please enable notifications. Go to app settings to choose which notifications to receive.</string>
+    <string name="welcome_description_4">
+        Be a good neighbor by following the rules.\n\n
+        1. No personal info, especially phone numbers.\n
+        2. No bullying or defaming.\n
+        3. Repeated down-voting is bad.\n
+        4. Be polite, helpful and informative.\n
+        5. Eat more jelly donuts.\n
+    </string>
+    <string name="welcome_description_5">The Huh? mummy thanks you.</string>
 
 </resources>
