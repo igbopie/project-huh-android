@@ -150,6 +150,8 @@ public class CreateQuestionActivity extends ListActivity {
             String text = questionText.getText().toString();
             if (text.length() > MAX_CHARS) {
                 Toast.makeText(CreateQuestionActivity.this, "Text too long", Toast.LENGTH_SHORT).show();
+            } else if (text.trim().length() == 0) {
+                Toast.makeText(CreateQuestionActivity.this, "Please write a question", Toast.LENGTH_SHORT).show();
             } else {
                 new CreateQuestion(selectedQuestionType, text).execute();
             }
