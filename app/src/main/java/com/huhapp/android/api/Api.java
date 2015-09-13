@@ -43,6 +43,7 @@ public class Api {
     public static final String ENDPOINT_VOTE_DOWN = "api/vote/down";
     public static final String ENDPOINT_QUESTION_CREATE = "api/question/create";
     public static final String ENDPOINT_QUESTION_VIEW = "api/question/view";
+    public static final String ENDPOINT_QUESTION_FLAG = "api/question/flag";
     public static final String ENDPOINT_QUESTIONS_LATEST = "api/question/recent";
     public static final String ENDPOINT_QUESTIONS_TRENDING = "api/question/trending";
     public static final String ENDPOINT_QUESTIONS_NEAR = "api/question/near";
@@ -327,4 +328,13 @@ public class Api {
 
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_QUESTION_CREATE, params, Question.class);
     }
+
+    public static Void questionFlag(String questionId, String reason) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("questionId", questionId);
+        params.put("reason", reason);
+
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_QUESTION_FLAG, params, Void.class);
+    }
+
 }

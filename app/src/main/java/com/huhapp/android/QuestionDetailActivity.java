@@ -1,8 +1,10 @@
 package com.huhapp.android;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -23,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Comment;
@@ -46,6 +49,10 @@ public class QuestionDetailActivity extends ListActivity {
     }
 
     public static String EXTRA_QUESTION_ID = "__question_id__";
+
+    public static final String REASON_INAPPROPRIATE = "Inappropriate";
+    public static final String REASON_HATEFUL = "Hateful";
+    public static final String REASON_CANCEL = "Cancel";
 
     private String questionId;
     private Question question;
@@ -145,6 +152,30 @@ public class QuestionDetailActivity extends ListActivity {
                     if (item.getItemId() == R.id.questionDetailShareOptions) {
                         startActivity(Intent.createChooser(getShareIntent(), "Share"));
                     } else if (item.getItemId() == R.id.questionDetailFlagOptions) {
+                        CharSequence colors[] = new CharSequence[]{
+                                REASON_INAPPROPRIATE,
+                                REASON_HATEFUL,
+                                REASON_CANCEL};
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(QuestionDetailActivity.this);
+                        builder.setTitle("Select a Reason");
+                        builder.setItems(colors, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String reason = null;
+                                if (which == 0) {
+                                    reason = REASON_INAPPROPRIATE;
+                                } else if (which == 1) {
+                                    reason = REASON_HATEFUL;
+                                }
+
+                                if (reason != null) {
+                                    new Flag(reason).execute();
+                                }
+                            }
+                        });
+                        builder.show();
+
                         Log.i("FLAG", "FLAG");
                     }
                     return false;
@@ -294,6 +325,37 @@ public class QuestionDetailActivity extends ListActivity {
             imm.hideSoftInputFromWindow(textBoxInput.getWindowToken(), 0);
 
             new GetQuestionAndComments().execute();
+        }
+    }
+
+    private class Flag extends AsyncTask<Void,Void,Void> {
+        String text;
+        private Flag(String text) {
+            this.text = text;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
+            mSwipeRefreshLayout.setRefreshing(true);
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Api.questionFlag(questionId, text);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
+            mSwipeRefreshLayout.setRefreshing(false);
+            Toast.makeText(QuestionDetailActivity.this, "Question Flagged", Toast.LENGTH_SHORT).show();
         }
     }
 }
