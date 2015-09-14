@@ -29,7 +29,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
+import com.huhapp.android.CustomPullAnimation;
 import com.huhapp.android.MainActivity;
 import com.huhapp.android.QuestionDetailActivity;
 import com.huhapp.android.R;
@@ -39,11 +41,15 @@ import com.huhapp.android.api.model.Question;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionListFragment extends ListFragment
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+
+public class QuestionListFragment extends ListFragment implements PtrHandler
 {
     QuestionAdapter adapter;
     String apiEndpoint;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    PtrFrameLayout swipeToRefresh;
+    ProgressBar progressBar;
 
     public static QuestionListFragment newInstance(String apiEndpoint)
     {
@@ -76,12 +82,16 @@ public class QuestionListFragment extends ListFragment
 
         setListAdapter(adapter);
 
-
-
         //super.onCreateView(inflater, container, savedInstanceState);
         View view =  inflater.inflate(R.layout.fragment_questions_list, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeLayout);
+        swipeToRefresh = (PtrFrameLayout) view.findViewById(R.id.swipeLayout);
+        swipeToRefresh.setPtrHandler(this);
+        CustomPullAnimation headerView = new CustomPullAnimation(getActivity());
+        swipeToRefresh.setHeaderView(headerView);
+        swipeToRefresh.addPtrUIHandler(headerView);
+
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         return view;
     }
@@ -91,7 +101,7 @@ public class QuestionListFragment extends ListFragment
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == MainActivity.CREATE_QUESTION_CODE && resultCode == Activity.RESULT_OK) {
-            new GetQuestionsTask().execute();
+            new GetQuestionsTask(true).execute();
         }
     }
 
@@ -100,20 +110,11 @@ public class QuestionListFragment extends ListFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // http://stackoverflow.com/questions/26858692/swiperefreshlayout-setrefreshing-not-showing-indicator-initially
-        mSwipeRefreshLayout.setProgressViewOffset(false, 0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new GetQuestionsTask().execute();
-            }
-        });
-
-        GetQuestionsTask gQT = new GetQuestionsTask();
+        GetQuestionsTask gQT = new GetQuestionsTask(true);
         gQT.execute();
     }
+
+
 
     public class QuestionAdapter extends ArrayAdapter<Question> {
         public QuestionAdapter(Context context, List<Question> questions) {
@@ -138,15 +139,22 @@ public class QuestionListFragment extends ListFragment
     }
 
     private class GetQuestionsTask extends AsyncTask<Void,Void,List<Question>> {
-        private GetQuestionsTask() {
+        private boolean showLoader;
+
+        public GetQuestionsTask(boolean showLoader) {
+            this.showLoader = showLoader;
+        }
+
+        public GetQuestionsTask() {
+            this.showLoader = false;
         }
 
         @Override
         protected void onPreExecute() {
-            if (mSwipeRefreshLayout != null) {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
             super.onPreExecute();
+            if (showLoader) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
@@ -160,17 +168,29 @@ public class QuestionListFragment extends ListFragment
         protected void onPostExecute(List<Question> result) {
             super.onPostExecute(result);
 
-            if (mSwipeRefreshLayout != null) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+
+            progressBar.setVisibility(View.INVISIBLE);
 
             if (result != null) {
                 adapter.clear();
                 adapter.addAll(result);
                 adapter.notifyDataSetChanged();
             }
-            //swipeLayout.setRefreshing(false);*/
+
+            if (swipeToRefresh != null) {
+                swipeToRefresh.refreshComplete();
+            }
         }
+    }
+
+    @Override
+    public boolean checkCanDoRefresh(PtrFrameLayout ptrFrameLayout, View view, View view1) {
+        return true;
+    }
+
+    @Override
+    public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
+        new GetQuestionsTask().execute();
     }
 
 }
