@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huhapp.android.api.model.Comment;
 import com.huhapp.android.api.model.Notification;
+import com.huhapp.android.api.model.Page;
 import com.huhapp.android.api.model.Question;
 import com.huhapp.android.api.model.QuestionType;
 import com.huhapp.android.api.model.Setting;
@@ -52,6 +53,9 @@ public class Api {
     public static final String ENDPOINT_QUESTIONS_FAVORITES = "api/question/favorites";
     public static final String ENDPOINT_COMMENTS_LIST = "api/comment/list";
     public static final String ENDPOINT_COMMENTS_CREATE = "api/comment/create";
+
+
+    public static final String ENDPOINT_PAGE = "api/page/view";
 
 
     public static final int RESPONSE_CODE_OK = 200;
@@ -337,4 +341,11 @@ public class Api {
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_QUESTION_FLAG, params, Void.class);
     }
 
+    public static Page pageView(String url) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("url", url);
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_PAGE, params, Page.class);
+    }
+
 }
+

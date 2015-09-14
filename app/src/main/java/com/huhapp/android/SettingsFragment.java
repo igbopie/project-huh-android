@@ -77,28 +77,47 @@ public class SettingsFragment extends ListFragment {
         if (tag == null) {
             return;
         }
+        String page = null;
+        String title = null;
         switch (tag.intValue()) {
             case NOTIFICATIONS:
-                Log.i("MORE", "NOTIFICATIONS");
                 startActivity(new Intent(getActivity(), NotificationSettingsActivity.class));
                 break;
             case TERMS_OF_USE:
-                Log.i("MORE", "TERMS_OF_USE");
+                page = "terms-of-use";
+                title = "Terms of Use";
                 break;
             case PRIVACY_POLICY:
-                Log.i("MORE", "PRIVACY_POLICY");
+                page = "privacy-policy";
+                title = "Privacy Policy";
                 break;
             case RULES:
-                Log.i("MORE", "RULES");
+                page = "rules";
+                title = "Rules";
                 break;
             case SEND_FEEDBACK:
-                Log.i("MORE", "SEND_FEEDBACK");
+                /* Create the Intent */
+                final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+                /* Fill it with Data */
+                emailIntent.setType("plain/text");
+                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"feedback@huhapp.com"});
+                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Huh Feedback");
+
+                /* Send it off to the Activity-Chooser */
+                startActivity(Intent.createChooser(emailIntent, "Send Feedback"));
                 break;
         }
-        //new CustomToast(getActivity(), numbers_digits[(int) id]);
-        //Intent intent = new Intent(this.getActivity(), QuestionDetailActivity.class);
-        //intent.putExtra(QuestionDetailActivity.EXTRA_QUESTION_ID, notification.getQuestionId());
-        //startActivity(intent);
+
+        if (page != null) {
+            Bundle b = new Bundle();
+            b.putString("url", page);
+            b.putString("title", title);
+
+            Intent intent = new Intent(getActivity(), WebSettingsActivity.class);
+            intent.putExtras(b);
+            startActivity(intent);
+        }
     }
 
 

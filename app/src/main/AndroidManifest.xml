@@ -88,6 +88,12 @@
             android:theme="@style/NoActionBar"
             >
         </activity>
+
+
+        <activity
+            android:name=".WebSettingsActivity"
+            android:label="@string/title_activity_notification_settings" >
+        </activity>
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@
     <string name="title_activity_create_question">Post Question</string>
     <string name="title_activity_notification_settings">Notification Settings</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="title_activity_web_settings">Settings</string>
 
     <string name="welcome_title_1">Welcome to Huh?</string>
     <string name="welcome_title_2">Enable Location</string>
