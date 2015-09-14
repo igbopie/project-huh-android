@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -24,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +38,8 @@ import com.huhapp.android.util.QuestionViewUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -116,20 +118,24 @@ public class QuestionDetailActivity extends ListActivity {
             }
         });
 
-        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        PtrFrameLayout swipeToRefresh = (PtrFrameLayout) findViewById(R.id.swipeLayout);
+        CustomPullAnimation headerView = new CustomPullAnimation(this);
+        swipeToRefresh.setHeaderView(headerView);
+        swipeToRefresh.addPtrUIHandler(headerView);
+        swipeToRefresh.setPtrHandler(new PtrHandler() {
             @Override
-            public void onRefresh() {
+            public boolean checkCanDoRefresh(PtrFrameLayout ptrFrameLayout, View view, View view1) {
+                return true;
+            }
+
+            @Override
+            public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
                 new GetQuestionAndComments().execute();
             }
         });
 
-        // http://stackoverflow.com/questions/26858692/swiperefreshlayout-setrefreshing-not-showing-indicator-initially
-        mSwipeRefreshLayout.setProgressViewOffset(false, 0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-
         // here as it uses view components
-        new GetQuestionAndComments().execute();
+        new GetQuestionAndComments(true).execute();
 
     }
     @Override
@@ -250,17 +256,24 @@ public class QuestionDetailActivity extends ListActivity {
     }
 
     private class GetQuestionAndComments extends AsyncTask<Void,Void,Void> {
+        private boolean showLoader = false;
 
         private GetQuestionAndComments() {
+            this.showLoader = false;
         }
+
+        private GetQuestionAndComments(boolean showLoader) {
+            this.showLoader = showLoader;
+        }
+
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
-            mSwipeRefreshLayout.setRefreshing(true);
-
+            if (showLoader){
+                findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
@@ -273,8 +286,10 @@ public class QuestionDetailActivity extends ListActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
-            mSwipeRefreshLayout.setRefreshing(false);
+
+            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+            ((PtrFrameLayout) findViewById(R.id.swipeLayout)).refreshComplete();
+
             adapterArrayList.clear();
             if (question != null) {
                 adapterArrayList.add(question);
@@ -301,10 +316,7 @@ public class QuestionDetailActivity extends ListActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
-            mSwipeRefreshLayout.setRefreshing(true);
-
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -324,7 +336,7 @@ public class QuestionDetailActivity extends ListActivity {
                     Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(textBoxInput.getWindowToken(), 0);
 
-            new GetQuestionAndComments().execute();
+            new GetQuestionAndComments(true).execute();
         }
     }
 
@@ -337,10 +349,7 @@ public class QuestionDetailActivity extends ListActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
-            mSwipeRefreshLayout.setRefreshing(true);
-
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -352,9 +361,7 @@ public class QuestionDetailActivity extends ListActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
-            SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
-            mSwipeRefreshLayout.setRefreshing(false);
+            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
             Toast.makeText(QuestionDetailActivity.this, "Question Flagged", Toast.LENGTH_SHORT).show();
         }
     }

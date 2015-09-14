@@ -23,6 +23,7 @@
       android:background="#ffffff"
     >
 
+
     <LinearLayout
         android:id="@+id/textBoxContainer"
         android:orientation="horizontal"
@@ -59,21 +60,35 @@
 
     </LinearLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/swipeLayout"
+        xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@color/animationBackground"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_above="@+id/textBoxContainer">
+        android:layout_above="@+id/textBoxContainer"
+        >
         <ListView
             android:id="@android:id/list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:background="#ffffff"
             ></ListView>
-    </android.support.v4.widget.SwipeRefreshLayout>
+
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible"
+        />
 
 </RelativeLayout>
 
