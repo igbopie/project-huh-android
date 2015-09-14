@@ -38,6 +38,7 @@ import com.huhapp.android.util.QuestionViewUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -124,8 +125,8 @@ public class QuestionDetailActivity extends ListActivity {
         swipeToRefresh.addPtrUIHandler(headerView);
         swipeToRefresh.setPtrHandler(new PtrHandler() {
             @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout ptrFrameLayout, View view, View view1) {
-                return true;
+            public boolean checkCanDoRefresh(PtrFrameLayout ptrFrameLayout, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(ptrFrameLayout, content, header);
             }
 
             @Override

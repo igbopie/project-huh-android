@@ -22,8 +22,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +39,7 @@ import com.huhapp.android.api.model.Question;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 
@@ -184,8 +183,8 @@ public class QuestionListFragment extends ListFragment implements PtrHandler
     }
 
     @Override
-    public boolean checkCanDoRefresh(PtrFrameLayout ptrFrameLayout, View view, View view1) {
-        return true;
+    public boolean checkCanDoRefresh(PtrFrameLayout ptrFrameLayout, View content, View header) {
+        return PtrDefaultHandler.checkContentCanBePulledDown(ptrFrameLayout, content, header);
     }
 
     @Override

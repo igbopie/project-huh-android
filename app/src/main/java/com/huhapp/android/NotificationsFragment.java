@@ -31,13 +31,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.huhapp.android.api.Api;
 import com.huhapp.android.api.model.Notification;
 import com.huhapp.android.util.DateUtil;
 import com.huhapp.android.util.NotificationUpdateListener;
-import com.huhapp.android.util.PropertyAccessor;
 import com.huhapp.android.util.QuestionViewUtil;
 
 import java.util.ArrayList;
@@ -45,13 +45,19 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+
 public class NotificationsFragment  extends ListFragment
 {
     NotificationAdapter adapter;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    PtrFrameLayout swipeToRefresh;
     Timer readTimer;
     boolean detached = false;
     NotificationUpdateListener notificationListener;
+    ProgressBar progressBar;
+
 
     public static NotificationsFragment newInstance()
     {
@@ -77,18 +83,15 @@ public class NotificationsFragment  extends ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         adapter = new NotificationAdapter(
                 inflater.getContext(),
                 new ArrayList<Notification>());
-
         setListAdapter(adapter);
 
         //super.onCreateView(inflater, container, savedInstanceState);
         View view =  inflater.inflate(R.layout.fragment_notification_list, container, false);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeLayout);
-
+        swipeToRefresh = (PtrFrameLayout) view.findViewById(R.id.swipeLayout);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         return view;
     }
 
@@ -96,18 +99,22 @@ public class NotificationsFragment  extends ListFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // http://stackoverflow.com/questions/26858692/swiperefreshlayout-setrefreshing-not-showing-indicator-initially
-        mSwipeRefreshLayout.setProgressViewOffset(false, 0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        CustomPullAnimation headerView = new CustomPullAnimation(getActivity());
+        swipeToRefresh.setHeaderView(headerView);
+        swipeToRefresh.addPtrUIHandler(headerView);
+        swipeToRefresh.setPtrHandler(new PtrHandler() {
             @Override
-            public void onRefresh() {
+            public boolean checkCanDoRefresh(PtrFrameLayout ptrFrameLayout, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(ptrFrameLayout, content, header);
+            }
+
+            @Override
+            public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
                 new GetNotificationTask().execute();
             }
         });
 
-        new GetNotificationTask().execute();
+        new GetNotificationTask(true).execute();
     }
 
     public class NotificationAdapter extends ArrayAdapter<Notification> {
@@ -227,13 +234,20 @@ public class NotificationsFragment  extends ListFragment
     }
 
     private class GetNotificationTask extends AsyncTask<Void,Void,List<Notification>> {
+
+        boolean showLoader = false;
+
         private GetNotificationTask() {
+        }
+
+        public GetNotificationTask(boolean showLoader) {
+            this.showLoader = showLoader;
         }
 
         @Override
         protected void onPreExecute() {
-            if (mSwipeRefreshLayout != null) {
-                mSwipeRefreshLayout.setRefreshing(true);
+            if (showLoader) {
+                progressBar.setVisibility(View.VISIBLE);
             }
             super.onPreExecute();
         }
@@ -247,8 +261,10 @@ public class NotificationsFragment  extends ListFragment
         protected void onPostExecute(List<Notification> result) {
             super.onPostExecute(result);
 
-            if (mSwipeRefreshLayout != null) {
-                mSwipeRefreshLayout.setRefreshing(false);
+            progressBar.setVisibility(View.INVISIBLE);
+
+            if (swipeToRefresh != null) {
+                swipeToRefresh.refreshComplete();
             }
 
             if (result != null) {

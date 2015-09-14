@@ -13,24 +13,26 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<in.srain.cube.views.ptr.PtrClassicFrameLayout
-    android:id="@+id/swipeLayout"
-    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/animationBackground"
- >
-    <RelativeLayout
+    >
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#ffffff"
-        ></ListView>
+        android:background="@color/animationBackground"
+     >
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ffffff"
+            ></ListView>
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -40,9 +42,6 @@
         android:layout_centerVertical="true"
         android:visibility="invisible"
         />
-
-    </RelativeLayout>
-
-</in.srain.cube.views.ptr.PtrClassicFrameLayout>
+</RelativeLayout>
 
 

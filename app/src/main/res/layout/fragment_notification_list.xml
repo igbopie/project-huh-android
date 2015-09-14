@@ -13,17 +13,33 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<android.support.v4.widget.SwipeRefreshLayout
-
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipeLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <ListView
-        android:id="@android:id/list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/swipeLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        ></ListView>
-</android.support.v4.widget.SwipeRefreshLayout>
+        android:background="@color/animationBackground">
 
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#ffffff"
+                ></ListView>
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible"
+        />
+
+</RelativeLayout>
 
