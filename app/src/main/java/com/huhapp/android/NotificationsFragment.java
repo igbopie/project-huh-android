@@ -150,11 +150,11 @@ public class NotificationsFragment  extends ListFragment
 
             String message = "";
             if (notification.getType().equals("OnQuestionPosted")){
-                message = "A new question was posted";
+                message = "New question was posted";
                 image.setImageResource(R.drawable.notification_question);
 
             } else if (notification.getType().equals("OnCommentOnMyQuestion")){
-                message = "Your question was commented";
+                message = "New comment on question you posted";
                 image.setImageResource(R.drawable.notification_comment);
 
                 qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -167,7 +167,7 @@ public class NotificationsFragment  extends ListFragment
                 }
 
             } else if (notification.getType().equals("OnCommentOnMyComment")){
-                message = "Your comment was commented";
+                message = "New comment on comment you posted";
                 image.setImageResource(R.drawable.notification_comment);
 
                 qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -180,15 +180,15 @@ public class NotificationsFragment  extends ListFragment
                 }
 
             } else if (notification.getType().equals("OnUpVoteOnMyQuestion")){
-                message = "Your question was up voted";
+                message = "Your question was up-voted";
                 image.setImageResource(R.drawable.notification_up_vote);
 
             } else if (notification.getType().equals("OnDownVoteOnMyQuestion")){
-                message = "Your question was down voted";
+                message = "Your question was down-voted";
                 image.setImageResource(R.drawable.notification_down_vote);
 
             } else if (notification.getType().equals("OnUpVoteOnMyComment")){
-                message = "Your comment was up voted";
+                message = "Your comment was up-voted";
                 image.setImageResource(R.drawable.notification_up_vote);
 
                 qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -201,7 +201,7 @@ public class NotificationsFragment  extends ListFragment
                 }
 
             } else if (notification.getType().equals("OnDownVoteOnMyComment")){
-                message = "Your comment was down voted";
+                message = "Your comment was down-voted";
                 image.setImageResource(R.drawable.notification_down_vote);
 
                 qText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
