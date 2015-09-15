@@ -57,6 +57,7 @@ public class NotificationsFragment  extends ListFragment
     boolean detached = false;
     NotificationUpdateListener notificationListener;
     ProgressBar progressBar;
+    View noNotificationPlaceholder;
 
 
     public static NotificationsFragment newInstance()
@@ -78,8 +79,6 @@ public class NotificationsFragment  extends ListFragment
         startActivity(intent);
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,6 +91,7 @@ public class NotificationsFragment  extends ListFragment
         View view =  inflater.inflate(R.layout.fragment_notification_list, container, false);
         swipeToRefresh = (PtrFrameLayout) view.findViewById(R.id.swipeLayout);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        noNotificationPlaceholder = view.findViewById(R.id.noNotificationPlaceholder);
         return view;
     }
 
@@ -284,6 +284,12 @@ public class NotificationsFragment  extends ListFragment
                         }
                     }, 3000);
                 }
+            }
+
+            if (adapter.getCount() == 0) {
+                noNotificationPlaceholder.setVisibility(View.VISIBLE);
+            } else {
+                noNotificationPlaceholder.setVisibility(View.GONE);
             }
         }
     }

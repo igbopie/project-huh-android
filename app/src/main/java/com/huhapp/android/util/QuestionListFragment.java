@@ -49,6 +49,7 @@ public class QuestionListFragment extends ListFragment implements PtrHandler
     String apiEndpoint;
     PtrFrameLayout swipeToRefresh;
     ProgressBar progressBar;
+    View noQuestionsPlaceholder;
 
     public static QuestionListFragment newInstance(String apiEndpoint)
     {
@@ -91,6 +92,8 @@ public class QuestionListFragment extends ListFragment implements PtrHandler
         swipeToRefresh.addPtrUIHandler(headerView);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
+        noQuestionsPlaceholder = view.findViewById(R.id.noQuestionsPlaceholder);
 
         return view;
     }
@@ -174,6 +177,12 @@ public class QuestionListFragment extends ListFragment implements PtrHandler
                 adapter.clear();
                 adapter.addAll(result);
                 adapter.notifyDataSetChanged();
+            }
+
+            if (adapter.getCount() == 0) {
+                noQuestionsPlaceholder.setVisibility(View.VISIBLE);
+            } else {
+                noQuestionsPlaceholder.setVisibility(View.GONE);
             }
 
             if (swipeToRefresh != null) {
