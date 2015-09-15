@@ -58,6 +58,7 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar.Solid">
         <item name="android:background">@color/buttonTabMainColor</item>
         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+        <item name="android:icon">@drawable/huh</item>
     </style>
 
     <!-- ActionBar title text -->
