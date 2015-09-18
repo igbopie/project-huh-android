@@ -29,7 +29,7 @@ import java.util.Map;
  * Created by igbopie on 4/11/15.
  */
 public class Api {
-    public static final String ENDPOINT = "https://staging-huh-app.herokuapp.com/";
+    public static final String ENDPOINT = "https://huh-app.herokuapp.com/";
     public static final String ENDPOINT_USER_LOGIN = "api/user/login";
     public static final String ENDPOINT_USER_LOGIN_CHECK = "api/user/login/check";
     public static final String ENDPOINT_USER_CREATE = "api/user/create";
