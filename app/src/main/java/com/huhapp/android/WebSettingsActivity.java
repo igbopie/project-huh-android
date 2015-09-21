@@ -43,7 +43,13 @@ public class WebSettingsActivity extends Activity {
 
             if (result != null) {
                 WebView webView = (WebView) findViewById(R.id.webView);
-                webView.loadDataWithBaseURL(url, result.getHtml(), "text/html", "UTF-8", url);
+                //http://www.huhapp.com/css/staticpages.css
+                String webHtml = "<html><head>" +
+                        "<link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>" +
+                        "<link rel=\"stylesheet\" href=\"" + Api.ENDPOINT +"/css/staticpages.css\">" +
+                        "</head>" +
+                        "<body>" + result.getHtml() + "</body></html>";
+                webView.loadDataWithBaseURL(url, webHtml, "text/html", "UTF-8", url);
             }
         }
     }

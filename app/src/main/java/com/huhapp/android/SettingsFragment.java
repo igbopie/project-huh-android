@@ -40,10 +40,11 @@ public class SettingsFragment extends ListFragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final int NOTIFICATIONS = 1;
-    private static final int TERMS_OF_USE = 2;
-    private static final int PRIVACY_POLICY = 3;
-    private static final int RULES = 4;
-    private static final int SEND_FEEDBACK = 5;
+    private static final int ABOUT_THIS_BETA = 2;
+    private static final int TERMS_OF_USE = 3;
+    private static final int PRIVACY_POLICY = 4;
+    private static final int RULES = 5;
+    private static final int SEND_FEEDBACK = 6;
 
     public static List<MenuItem> getSettingsMenu() {
 
@@ -53,6 +54,7 @@ public class SettingsFragment extends ListFragment {
         settingsMenu.add(new MenuItem("Notifications", NOTIFICATIONS, false));
 
         settingsMenu.add(new MenuItem("About", true));
+        settingsMenu.add(new MenuItem("About this beta", ABOUT_THIS_BETA, false));
         settingsMenu.add(new MenuItem("Terms of use", TERMS_OF_USE, false));
         settingsMenu.add(new MenuItem("Privacy policy", PRIVACY_POLICY, false));
         settingsMenu.add(new MenuItem("Rules", RULES, false));
@@ -82,6 +84,10 @@ public class SettingsFragment extends ListFragment {
         switch (tag.intValue()) {
             case NOTIFICATIONS:
                 startActivity(new Intent(getActivity(), NotificationSettingsActivity.class));
+                break;
+            case ABOUT_THIS_BETA:
+                page = "about-this-beta";
+                title = "About This Beta";
                 break;
             case TERMS_OF_USE:
                 page = "terms-of-use";
