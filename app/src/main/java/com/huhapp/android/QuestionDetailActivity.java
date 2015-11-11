@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.huhapp.android.util.PropertyAccessor;
 import com.huhapp.android.util.QuestionViewUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -147,7 +149,7 @@ public class QuestionDetailActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i("CLICK", ""+item.getItemId());
+        Log.i("CLICK", "" + item.getItemId());
         if (item.getItemId() == R.id.questionDetailMoreOptions) {
             ///
             final PopupMenu popup = new PopupMenu(this, findViewById(R.id.questionDetailMoreOptions));
@@ -247,9 +249,63 @@ public class QuestionDetailActivity extends ListActivity {
             if (item instanceof Question) {
                 Question question = (Question) item;
                 QuestionViewUtil.fillView(convertView, question, QuestionDetailActivity.this, true);
+                convertView.setOnLongClickListener(null);
             } else {
-                Comment comment = (Comment) item;
+                final Comment comment = (Comment) item;
                 CommentViewUtil.fillView(convertView, comment, question, QuestionDetailActivity.this);
+                convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        final PopupMenu popup = new PopupMenu(QuestionDetailActivity.this, view);
+                        MenuInflater inflater = popup.getMenuInflater();
+                        inflater.inflate(R.menu.menu_comment_detail_popup, popup.getMenu());
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                if (item.getItemId() == R.id.questionDetailReplyOptions) {
+                                    textBoxInput.setText("@" + comment.getUsername() + " ");
+                                    textBoxInput.setSelection(textBoxInput.getText().length());
+                                    textBoxInput.requestFocus();
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                                    return true;
+
+                                } else if (item.getItemId() == R.id.questionDetailFlagOptions) {
+                                    CharSequence colors[] = new CharSequence[]{
+                                            REASON_INAPPROPRIATE,
+                                            REASON_HATEFUL,
+                                            REASON_CANCEL};
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(QuestionDetailActivity.this);
+                                    builder.setTitle("Select a Reason");
+                                    builder.setItems(colors, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String reason = null;
+                                            if (which == 0) {
+                                                reason = REASON_INAPPROPRIATE;
+                                            } else if (which == 1) {
+                                                reason = REASON_HATEFUL;
+                                            }
+
+                                           if (reason != null) {
+                                                new FlagComment(comment.getId(),reason).execute();
+                                            }
+                                        }
+                                    });
+                                    builder.show();
+
+                                    Log.i("FLAG", "FLAG");
+                                    return true;
+                                }
+                                return false;
+                            }
+                        });
+                        popup.show();
+                        return true;
+                    }
+                });
             }
 
             return convertView;
@@ -258,6 +314,8 @@ public class QuestionDetailActivity extends ListActivity {
 
     private class GetQuestionAndComments extends AsyncTask<Void,Void,Void> {
         private boolean showLoader = false;
+        private boolean scrollBottom = false;
+
 
         private GetQuestionAndComments() {
             this.showLoader = false;
@@ -265,6 +323,11 @@ public class QuestionDetailActivity extends ListActivity {
 
         private GetQuestionAndComments(boolean showLoader) {
             this.showLoader = showLoader;
+        }
+
+        private GetQuestionAndComments(boolean showLoader, boolean scrollBottom) {
+            this.showLoader = showLoader;
+            this.scrollBottom = scrollBottom;
         }
 
 
@@ -281,6 +344,9 @@ public class QuestionDetailActivity extends ListActivity {
         protected Void doInBackground(Void... voids) {
             question = Api.getQuestion(questionId);
             comments = Api.getComments(questionId);
+            if (comments != null) {
+                Collections.reverse(comments);
+            }
             return null;
         }
 
@@ -305,6 +371,16 @@ public class QuestionDetailActivity extends ListActivity {
             mActionBar.setDisplayShowTitleEnabled(false);
             mActionBar.setDisplayShowTitleEnabled(true);
             mActionBar.setTitle(question.getType().getWord());
+
+            if (this.scrollBottom) {
+                findViewById(android.R.id.list).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Select the last row so it will scroll into view...
+                        ((ListView)findViewById(android.R.id.list)).setSelection(adapter.getCount() - 1);
+                    }
+                });
+            }
         }
     }
 
@@ -337,7 +413,7 @@ public class QuestionDetailActivity extends ListActivity {
                     Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(textBoxInput.getWindowToken(), 0);
 
-            new GetQuestionAndComments(true).execute();
+            new GetQuestionAndComments(true, true).execute();
         }
     }
 
@@ -364,6 +440,34 @@ public class QuestionDetailActivity extends ListActivity {
             super.onPostExecute(result);
             findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
             Toast.makeText(QuestionDetailActivity.this, "Question Flagged", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class FlagComment extends AsyncTask<Void,Void,Void> {
+        String text;
+        String commentId;
+        private FlagComment(String commentId, String text) {
+            this.text = text;
+            this.commentId = commentId;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Api.commentFlag(commentId, text);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+            Toast.makeText(QuestionDetailActivity.this, "Comment Flagged", Toast.LENGTH_SHORT).show();
         }
     }
 }

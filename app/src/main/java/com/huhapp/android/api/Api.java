@@ -29,6 +29,7 @@ import java.util.Map;
  * Created by igbopie on 4/11/15.
  */
 public class Api {
+//    public static final String ENDPOINT = "https://staging-huh-app.herokuapp.com/";
     public static final String ENDPOINT = "https://huh-app.herokuapp.com/";
     public static final String ENDPOINT_USER_LOGIN = "api/user/login";
     public static final String ENDPOINT_USER_LOGIN_CHECK = "api/user/login/check";
@@ -53,6 +54,7 @@ public class Api {
     public static final String ENDPOINT_QUESTIONS_FAVORITES = "api/question/favorites";
     public static final String ENDPOINT_COMMENTS_LIST = "api/comment/list";
     public static final String ENDPOINT_COMMENTS_CREATE = "api/comment/create";
+    public static final String ENDPOINT_COMMENT_FLAG = "api/comment/flag";
 
 
     public static final String ENDPOINT_PAGE = "api/page/view";
@@ -339,6 +341,14 @@ public class Api {
         params.put("reason", reason);
 
         return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_QUESTION_FLAG, params, Void.class);
+    }
+
+    public static Void commentFlag(String commentId, String reason) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("commentId", commentId);
+        params.put("reason", reason);
+
+        return Api.makeRequestParsedForObject(ENDPOINT + ENDPOINT_COMMENT_FLAG, params, Void.class);
     }
 
     public static Page pageView(String url) {
