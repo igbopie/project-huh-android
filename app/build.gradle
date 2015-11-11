@@ -8,8 +8,8 @@ android {
         applicationId "com.huhapp.android"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 12
-        versionName "0.21"
+        versionCode 13
+        versionName "0.22"
     }
     buildTypes {
         release {
